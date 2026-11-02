@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+# the pilot user's own data and results never belong in git
+pilot-data/
+demo-data/
+mijn-gegevens/
+deel-mij/
+
+# local virtualenv (optional: pip install anthropic for the Claude API planner)
+.venv/
+
+# fuzz harness (fuzz/): its virtualenv and run output; findings and logs are local only
+.venv-fuzz/
+fuzz/findings/*
+!fuzz/findings/.gitkeep
+fuzz/logs/*
+!fuzz/logs/.gitkeep
+fuzz/REPORT.md
+.hypothesis/

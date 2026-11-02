@@ -1,0 +1,5 @@
+"Datum";"Naam / Omschrijving";"Rekening";"Tegenrekening";"Code";"Af Bij";"Bedrag (EUR)";"Mutatiesoort";"Mededelingen";"Saldo na mutatie";"Tag"
+"20260725";"Kartonfabriek Noord BV";"NL67INGB0006543210";"NL20INGB0001234567";"GT";"Af";"287,15";"Online bankieren";"Naam: Kartonfabriek Noord BV Omschrijving: F-2026-0301 IBAN: NL20INGB0001234567 Valutadatum: 25-07-2026";"1000,00";""
+"20260826";"Kartonfabriek Noord BV";"NL67INGB0006543210";"NL20INGB0001234567";"GT";"Af";"301,90";"Online bankieren";"Naam: Kartonfabriek Noord BV Omschrijving: F-2026-0355 IBAN: NL20INGB0001234567 Valutadatum: 26-08-2026";"1000,00";""
+"20260928";"Stroom & Co";"NL67INGB0006543210";"NL32INGB0007777777";"IC";"Af";"84,50";"Incasso";"Naam: Stroom & Co Omschrijving: Termijn oktober Machtiging ID: SC-1234";"1000,00";""
+"20261002";"Lena Bakker";"NL67INGB0006543210";"NL22SNSB0912345678";"OV";"Bij";"24,00";"Overschrijving";"Naam: Lena Bakker Omschrijving: Bestelling 1011 IBAN: x";"1000,00";""

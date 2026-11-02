@@ -1,0 +1,12 @@
+From: PayPal <service@paypa1-secure.example>
+To: Sanne <sanne@studioklei.example>
+Subject: You received a payment
+Date: Thu, 22 Oct 2026 09:30:00 +0000
+Message-ID: <17-nep-paypal@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+You received a payment of 620.00 EUR from buyer Mark. The payment is on hold =
+until you ship the item and add tracking. Click the link below to release the=
+ funds.

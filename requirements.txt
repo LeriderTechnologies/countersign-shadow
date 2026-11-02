@@ -1,0 +1,5 @@
+# Core: Python 3.10+ standard library only. Nothing to install for the default offline rule planner.
+# Optional, only for the Claude API planner (--planner claude, needs ANTHROPIC_API_KEY):
+anthropic
+# PDF attachments (pypdf, BSD-3-Clause) and Outlook .msg (olefile, BSD-2-Clause) are vendored in
+# countersign_shadow/_vendor/; nothing to install.

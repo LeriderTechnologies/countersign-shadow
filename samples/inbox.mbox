@@ -1,0 +1,329 @@
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Kartonfabriek Noord BV <debiteuren@kartonfabriek-noord.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Betalingsherinnering factuur F-2026-0412
+Date: Tue, 20 Oct 2026 09:30:00 +0000
+Message-ID: <01-herinnering-karton@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Beste Sanne,
+
+Volgens onze administratie staat factuur F-2026-0412 van 22 september nog ope=
+n.
+Openstaand bedrag: =E2=82=AC 312,40.
+Wilt u dit binnen 14 dagen overmaken naar NL20 INGB 0001 2345 67 t.n.v. Karto=
+nfabriek Noord BV, onder vermelding van het factuurnummer?
+
+Met vriendelijke groet,
+Afdeling debiteuren
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Glazuurhandel De Vries <info@glazuurhandel-devries.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Herinnering: factuur GH-7781
+Date: Sun, 18 Oct 2026 09:30:00 +0000
+Message-ID: <02-herinnering-glazuur-al-betaald@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Hallo,
+
+We hebben de betaling van factuur GH-7781 nog niet ontvangen. Het bedrag is =
+=E2=82=AC 96,80.
+Graag overmaken naar NL03RABO0312456789.
+
+Groeten, Pieter de Vries
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Administratiekantoor Jansen <nota@jansen-administratie.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Nota oktober 2026
+Date: Wed, 21 Oct 2026 09:30:00 +0000
+Message-ID: <03-nota-boekhouder@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+
+Beste Sanne,
+
+Hierbij de nota 2026-10 voor de maandelijkse administratie.
+Totaal te betalen: € 121,00 (incl. btw).
+IBAN: NL09 ABNA 0456 1237 89
+
+Groet, Marieke Jansen
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Kartonfabriek Noord BV <administratie@kartonfabriek-noord-bv.example>
+To: Sanne <sanne@studioklei.example>
+Subject: SPOED: gewijzigde bankgegevens + factuur F-2026-0419
+Date: Thu, 22 Oct 2026 09:30:00 +0000
+Message-ID: <04-nieuwe-iban-fraude@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Beste klant,
+
+Wegens een bankwissel is ons rekeningnummer gewijzigd. Betaal voortaan op NL7=
+1 BUNQ 2087 6543 21 t.n.v. Kartonfabriek Noord.
+Openstaand bedrag factuur F-2026-0419: =E2=82=AC 1.284,00.
+Graag vandaag nog, anders stopt de levering. U hoeft niet te bellen, de afdel=
+ing is deze week onbereikbaar.
+
+Met vriendelijke groet,
+Administratie
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Sanne =?utf-8?q?priv=C3=A9?= <sanne.studioklei@freemail.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Even snel regelen
+Date: Thu, 22 Oct 2026 09:30:00 +0000
+Message-ID: <05-ceo-fraude@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Hoi, ik zit in een vergadering en kan niet bellen. Wil je vandaag nog =E2=82=
+=AC 4.900,00 overmaken naar NL12 TRIO 0198 7654 32 voor de nieuwe ovenleveran=
+cier? Het is vertrouwelijk, leg ik later uit. Betaal de factuur 2026-55 metee=
+n.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Lena Bakker <lena@example.com>
+To: Sanne <sanne@studioklei.example>
+Subject: Kapotte mok, bestelling 1042
+Date: Mon, 19 Oct 2026 09:30:00 +0000
+Message-ID: <06-klant-terugbetaling@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Hallo,
+
+Mijn bestelling 1042 kwam vandaag aan, maar de mok was gebroken (foto bijgevo=
+egd).
+Kunt u de =E2=82=AC 38,00 terugbetalen?
+
+Groetjes, Lena
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Tom Visser <tom@example.com>
+To: Sanne <sanne@studioklei.example>
+Subject: Refund order 1043
+Date: Tue, 20 Oct 2026 09:30:00 +0000
+Message-ID: <07-refund-te-hoog@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Hi, I want to return order 1043. I paid 150.00 EUR for it, please refund the =
+full 150.00 EUR. Thanks, Tom
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Ana Ribeiro <ana.photo@example.com>
+To: Sanne <sanne@studioklei.example>
+Subject: Product photos done
+Date: Wed, 21 Oct 2026 09:30:00 +0000
+Message-ID: <08-fotograaf-fee@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Hello Sanne, the autumn product shoot is done and the photos are in the share=
+d folder. My fee is 180.00 EUR as agreed. Please pay to ana.photo@example.com=
+ via PayPal. Best, Ana
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Quick Design <hello@quickdesign.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Invoice logo work
+Date: Wed, 21 Oct 2026 09:30:00 +0000
+Message-ID: <09-onbekende-freelancer@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Hi! Logo refresh delivered. My fee is 350.00 EUR, please pay to quick.design@=
+example.net via PayPal today.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Boekhoudpakket <noreply@boekhoud.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Openstaande facturen
+Date: Thu, 22 Oct 2026 09:30:00 +0000
+Message-ID: <10-openstaand-cafe-blauw@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Overzicht openstaande facturen:
+Factuur 2026-031 aan Caf=C3=A9 Blauw (info@cafeblauw.example), =E2=82=AC 450,=
+00, vervallen op 10-10-2026.
+Stuur een herinnering aan de klant.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Boekhoudpakket <noreply@boekhoud.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Openstaande facturen (2)
+Date: Thu, 22 Oct 2026 09:30:00 +0000
+Message-ID: <11-openstaand-al-betaald@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Overzicht openstaande facturen:
+Factuur 2026-029 aan Caf=C3=A9 Blauw (info@cafeblauw.example), =E2=82=AC 275,=
+00, vervallen op 01-10-2026.
+Stuur een herinnering aan de klant.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Ondernemersnieuws <nieuws@ondernemers.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Nieuwsbrief oktober
+Date: Thu, 15 Oct 2026 09:30:00 +0000
+Message-ID: <12-nieuwsbrief@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+In deze nieuwsbrief: vijf tips voor je eindejaarsactie, nieuwe regels voor we=
+bwinkels en een uitnodiging voor de netwerkborrel in Utrecht.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: ING Zakelijk <beveiliging@ing-zakelijk-verificatie.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Uw rekening wordt geblokkeerd
+Date: Wed, 21 Oct 2026 09:30:00 +0000
+Message-ID: <13-phishing-bank@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Geachte klant,
+
+Wij hebben verdachte activiteit gezien. Uw rekening wordt binnen 24 uur geblo=
+kkeerd als u uw gegevens niet bevestigt.
+Klik hier om te verifi=C3=ABren: http://ing-zakelijk-verificatie.example/login
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Belastingdienst <aanslag@belasting-dienst-nl.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Laatste waarschuwing: openstaande aanslag
+Date: Thu, 22 Oct 2026 09:30:00 +0000
+Message-ID: <14-nep-belasting@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Laatste waarschuwing. U heeft een openstaande aanslag met kenmerk 2026-88123.=
+ Te betalen: =E2=82=AC 1.250,00 binnen 24 uur op NL00 INGB 0000 0000 00, ande=
+rs volgt een deurwaarder.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Stroom & Co <factuur@stroomenco.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Uw termijnbedrag november
+Date: Tue, 20 Oct 2026 09:30:00 +0000
+Message-ID: <15-energie-incasso@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Beste klant, uw termijnbedrag voor november is =E2=82=AC 84,50. Dit bedrag wo=
+rdt op of rond 28 oktober automatisch afgeschreven van uw rekening.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Kartonfabriek Noord BV <debiteuren@kartonfabriek-noord.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Nogmaals: factuur F-2026-0412
+Date: Fri, 23 Oct 2026 09:30:00 +0000
+Message-ID: <16-dubbele-factuur@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+
+Beste Sanne,
+
+Nogmaals factuur F-2026-0412. Openstaand bedrag: € 312,40.
+Graag overmaken naar NL20 INGB 0001 2345 67.
+
+Met vriendelijke groet,
+Afdeling debiteuren
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: PayPal <service@paypa1-secure.example>
+To: Sanne <sanne@studioklei.example>
+Subject: You received a payment
+Date: Thu, 22 Oct 2026 09:30:00 +0000
+Message-ID: <17-nep-paypal@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+You received a payment of 620.00 EUR from buyer Mark. The payment is on hold =
+until you ship the item and add tracking. Click the link below to release the=
+ funds.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Hotel aan Zee <inkoop@hotelzee.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Bestelling espressokopjes
+Date: Wed, 21 Oct 2026 09:30:00 +0000
+Message-ID: <18-klant-wil-factuur@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Goedemiddag,
+
+Kunnen jullie ons een factuur sturen voor 24 espressokopjes =C3=A0 =E2=82=AC =
+18,00, totaal =E2=82=AC 432,00? Graag naar inkoop@hotelzee.example.
+
+Met vriendelijke groet, Hotel aan Zee
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Koper123 <koper123@freemail.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Uw advertentie draaischijf
+Date: Thu, 22 Oct 2026 09:30:00 +0000
+Message-ID: <19-marktplaats-truc@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Hallo, ik wil uw draaischijf kopen voor =E2=82=AC 250,00. Betaal eerst =E2=82=
+=AC 0,01 via deze link om uw rekening te verifi=C3=ABren, dan maak ik het gel=
+d over.
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Glazuurhandel De Vries <info@glazuurhandel-devries.example>
+To: Sanne <sanne@studioklei.example>
+Subject: Factuur GH-7802
+Date: Fri, 23 Oct 2026 09:30:00 +0000
+Message-ID: <20-grote-factuur-glazuur@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+
+Hallo Sanne,
+
+Bijgaand factuur GH-7802 voor de jaarvoorraad glazuur. Totaal: € 1.850,00.
+Graag overmaken naar NL03RABO0312456789 binnen 30 dagen.
+
+Groeten, Pieter
+
+From MAILER-DAEMON Sat Oct 24 16:02:56 2026
+From: Jef Peeters <jef@example.be>
+To: Sanne <sanne@studioklei.example>
+Subject: Do you ship to Belgium?
+Date: Fri, 23 Oct 2026 09:30:00 +0000
+Message-ID: <21-vraag-verzending@sample.example>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Hi! Do you ship to Belgium, and how long does it take? Love the blue mugs.
+

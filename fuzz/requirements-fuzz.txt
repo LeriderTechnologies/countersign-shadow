@@ -1,0 +1,4 @@
+# Dev-only, for the overnight importer fuzz harness (fuzz/). Not needed to run or test the product itself
+# (see the repo-root requirements.txt). Install into a dedicated venv, never system Python:
+#   python3 -m venv .venv-fuzz && .venv-fuzz/bin/pip install -r fuzz/requirements-fuzz.txt
+hypothesis

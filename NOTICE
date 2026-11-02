@@ -1,0 +1,17 @@
+Countersign Shadow
+Copyright 2026 Lerider Technologies
+
+This product includes software developed by Lerider Technologies (https://lerider.com).
+
+It bundles, unmodified, in countersign_shadow/_vendor/:
+- pypdf 6.21.2 (https://pypi.org/project/pypdf/), BSD-3-Clause, see countersign_shadow/_vendor/pypdf/LICENSE
+- olefile 0.47 (https://pypi.org/project/olefile/), BSD-2-Clause, see countersign_shadow/_vendor/olefile/LICENSE.txt
+
+All sample mails, bank exports, people, companies, e-mail domains and IBANs in samples/ and tests/ are invented,
+with these exceptions, used on purpose as known fixtures:
+- the published IBANs of the Belastingdienst, DUO and CJIB (countersign_shadow/official.py and its tests), as
+  known-legitimate public payees;
+- the public consumer mail domain gmail.com, for invented senders writing from a private mailbox;
+- the public example IBAN NL91ABNA0417164301;
+- a few real company names (for example Adyen, PayPal, Hubo) in invented mails; their sender domains are
+  example.* domains. These mails were not sent by those companies.

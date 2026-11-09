@@ -152,6 +152,30 @@ class OpenAICompatPlanner(_ModelPlanner):
             headers["Authorization"] = f"Bearer {self.api_key}"
         req = urllib.request.Request(self.base_url + "/chat/completions", data=json.dumps(body).encode(),
                                      headers=headers, method="POST")
-        with urllib.request.urlopen(req, timeout=self.timeout) as resp:  # noqa: S310 (scheme checked above)
-            data = json.loads(resp.read().decode("utf-8"))
-        return data["choices"][0]["message"]["content"] or ""
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:  # noqa: S310 (scheme checked above)
+                data = json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            # Keep the server's own reason (e.g. Ollama's "unable to load model" when it is too old for the
+            # model's architecture); a bare "HTTP Error 500" hides why every case fell back to no_action.
+            detail = exc.read().decode("utf-8", "replace")[:300] if exc.fp else ""
+            raise RuntimeError(f"HTTP {exc.code} from {self.base_url}: {detail or exc.reason}") from None
+        return reply_text(data["choices"][0]["message"])
+
+
+_THINK = re.compile(r"<think>.*?(?:</think>|$)", re.S)
+
+
+def reply_text(message: dict) -> str:
+    """The text to parse from one chat-completions message. Thinking models (Qwen3/3.5, DeepSeek-R1) may wrap
+    their reasoning in <think>...</think> inside `content`, or return it in a separate `reasoning_content` /
+    `reasoning` field with an empty `content`; prefer the answer, fall back to the reasoning only if the
+    answer holds no JSON object."""
+    content = _THINK.sub("", message.get("content") or "").strip()
+    if extract_json(content) is not None:
+        return content
+    for key in ("reasoning_content", "reasoning"):
+        extra = message.get(key)
+        if isinstance(extra, str) and extract_json(extra) is not None:
+            return extra
+    return content

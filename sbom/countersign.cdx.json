@@ -1,0 +1,240 @@
+{
+  "components": [
+    {
+      "bom-ref": "olefile==0.47",
+      "description": "Python package to parse, read and write Microsoft OLE2 files (Structured Storage or Compound Document, Microsoft Office) (vendored, unmodified)",
+      "externalReferences": [
+        {
+          "comment": "from packaging metadata: Download-URL",
+          "type": "distribution",
+          "url": "https://github.com/decalage2/olefile/tarball/master"
+        },
+        {
+          "comment": "from packaging metadata: Home-page",
+          "type": "website",
+          "url": "https://www.decalage.info/python/olefileio"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "name": "License :: OSI Approved :: BSD License"
+          }
+        },
+        {
+          "license": {
+            "acknowledgement": "concluded",
+            "id": "BSD-2-Clause"
+          }
+        }
+      ],
+      "name": "olefile",
+      "purl": "pkg:pypi/olefile@0.47",
+      "type": "library",
+      "version": "0.47",
+      "properties": [
+        {
+          "name": "countersign:vendored-path",
+          "value": "countersign_shadow/_vendor/olefile"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pypdf==6.21.2",
+      "description": "A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files (vendored, unmodified)",
+      "externalReferences": [
+        {
+          "comment": "from packaging metadata Project-URL: Documentation",
+          "type": "documentation",
+          "url": "https://pypdf.readthedocs.io/en/latest/"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Bug Reports",
+          "type": "issue-tracker",
+          "url": "https://github.com/py-pdf/pypdf/issues"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Source",
+          "type": "other",
+          "url": "https://github.com/py-pdf/pypdf"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Changelog",
+          "type": "release-notes",
+          "url": "https://pypdf.readthedocs.io/en/latest/meta/CHANGELOG.html"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "pypdf",
+      "purl": "pkg:pypi/pypdf@6.21.2",
+      "type": "library",
+      "version": "6.21.2",
+      "properties": [
+        {
+          "name": "countersign:vendored-path",
+          "value": "countersign_shadow/_vendor/pypdf"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "olefile==0.47"
+    },
+    {
+      "ref": "pypdf==6.21.2"
+    },
+    {
+      "dependsOn": [
+        "olefile==0.47",
+        "pypdf==6.21.2"
+      ],
+      "ref": "root-component"
+    }
+  ],
+  "metadata": {
+    "component": {
+      "bom-ref": "root-component",
+      "description": "Offline payment-fraud checks on a mailbox and bank export; never moves money",
+      "externalReferences": [
+        {
+          "comment": "from pyproject urls: Homepage",
+          "type": "website",
+          "url": "https://github.com/LeriderTechnologies/countersign-shadow"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "countersign-shadow",
+      "type": "application",
+      "version": "2026.11.09"
+    },
+    "properties": [
+      {
+        "name": "cdx:reproducible",
+        "value": "true"
+      }
+    ],
+    "timestamp": "2026-11-09T00:00:00+00:00",
+    "tools": {
+      "components": [
+        {
+          "description": "CycloneDX Software Bill of Materials (SBOM) generator for Python projects and environments",
+          "externalReferences": [
+            {
+              "type": "build-system",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/actions"
+            },
+            {
+              "type": "distribution",
+              "url": "https://pypi.org/project/cyclonedx-bom/"
+            },
+            {
+              "type": "documentation",
+              "url": "https://cyclonedx-bom-tool.readthedocs.io/"
+            },
+            {
+              "type": "issue-tracker",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/issues"
+            },
+            {
+              "type": "license",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/blob/main/LICENSE"
+            },
+            {
+              "type": "release-notes",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/blob/main/CHANGELOG.md"
+            },
+            {
+              "type": "vcs",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/"
+            },
+            {
+              "type": "website",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/#readme"
+            }
+          ],
+          "group": "CycloneDX",
+          "licenses": [
+            {
+              "license": {
+                "acknowledgement": "declared",
+                "id": "Apache-2.0"
+              }
+            }
+          ],
+          "name": "cyclonedx-py",
+          "type": "application",
+          "version": "8.0.1"
+        },
+        {
+          "description": "Python library for CycloneDX",
+          "externalReferences": [
+            {
+              "type": "build-system",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/actions"
+            },
+            {
+              "type": "distribution",
+              "url": "https://pypi.org/project/cyclonedx-python-lib/"
+            },
+            {
+              "type": "documentation",
+              "url": "https://cyclonedx-python-library.readthedocs.io/"
+            },
+            {
+              "type": "issue-tracker",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/issues"
+            },
+            {
+              "type": "license",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/blob/main/LICENSE"
+            },
+            {
+              "type": "release-notes",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/blob/main/CHANGELOG.md"
+            },
+            {
+              "type": "vcs",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib"
+            },
+            {
+              "type": "website",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/#readme"
+            }
+          ],
+          "group": "CycloneDX",
+          "licenses": [
+            {
+              "license": {
+                "acknowledgement": "declared",
+                "id": "Apache-2.0"
+              }
+            }
+          ],
+          "name": "cyclonedx-python-lib",
+          "type": "library",
+          "version": "11.12.0"
+        }
+      ]
+    }
+  },
+  "version": 1,
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6"
+}

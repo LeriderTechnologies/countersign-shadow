@@ -15,7 +15,7 @@ rules, claim verification, Decimal-only money) but contains no execution path at
 ```bash
 python3 -m countersign_shadow demo            # headless run on the synthetic test set (no installs, Python 3.10+)
 python3 -m countersign_shadow start --demo    # same data in the local review page: http://127.0.0.1:8766/
-python3 -m unittest discover -s tests         # 361 tests (bare `discover` from the repo root too)
+python3 -m unittest discover -s tests         # 384 tests (bare `discover` from the repo root too)
 ```
 
 Nothing to install: PDF attachments and Outlook `.msg` files are read with vendored copies of pypdf and olefile
@@ -146,8 +146,8 @@ planner may not.
 | Planner | Flag | Data leaves the machine? | Notes |
 |---|---|---|---|
 | Offline rules (default) | `--planner rules` | No | Dutch + English regexes; deliberately naive (believes the message), so the checks do the real work |
-| Claude API | `--planner claude` | Yes, message text goes to Anthropic | Needs `pip install anthropic` and `ANTHROPIC_API_KEY`; default model `claude-haiku-4-5` (`--model` to change) |
-| Local model | `--planner local --url http://127.0.0.1:11434/v1 --model <name>` | No | Any OpenAI-compatible chat endpoint: Ollama, llama.cpp `llama-server`, LM Studio. Non-localhost URLs are refused unless `--allow-remote` |
+| Claude API | `--planner claude` | Yes — sender name + address, subject, date, body and extracted PDF-attachment text go to Anthropic's API; Anthropic's own data terms apply | Needs `pip install anthropic` and `ANTHROPIC_API_KEY`; default model `claude-haiku-4-5` (`--model` to change) |
+| Local model | `--planner local --url http://127.0.0.1:11434/v1 --model <name>` | No, unless `--allow-remote` — then the same fields (sender name + address, subject, date, body, extracted PDF-attachment text) go to the configured server | Any OpenAI-compatible chat endpoint: Ollama, llama.cpp `llama-server`, LM Studio. Non-localhost URLs are refused unless `--allow-remote` |
 
 `compare --planners rules,local` drafts with each planner on the same messages and prints where they agree. The
 feedback file records which planner made each card, so the summary shows right/wrong/dangerous per planner.
@@ -301,6 +301,8 @@ samples/      generated synthetic data
 tests/        unittest suite (python3 -m unittest discover -s tests)
 fuzz/         dev-only Hypothesis fuzz harness for the importers (fuzz/requirements-fuzz.txt; not needed to run)
 docs/         FORMATS.md (bank-format evidence log), screenshots
+sbom/         countersign.cdx.json: CycloneDX SBOM of the shipped third-party code
+tools/        sbom.sh: regenerates the SBOM (uses cyclonedx-py in a throw-away venv)
 ```
 
 ## Licence, security, how this was built
@@ -309,7 +311,14 @@ Apache License 2.0, see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). The vendore
 (BSD-2-Clause) keep their own licences, next to their code. Python 3.10+ standard library only; `anthropic` is
 optional.
 
-Found a way to make a check wave through a payment it should stop? See [`SECURITY.md`](SECURITY.md).
+Found a way to make a check wave through a payment it should stop? See [`SECURITY.md`](SECURITY.md) (private
+reporting channel and response targets). Which releases get security fixes, and until when:
+[`SUPPORT.md`](SUPPORT.md). Software bill of materials: [`sbom/countersign.cdx.json`](sbom/countersign.cdx.json)
+(CycloneDX 1.6, regenerated for every release by `tools/sbom.sh`). The project follows CRA-aligned practices for
+open-source software; it makes no claim of regulatory compliance.
+
+What personal data this tool touches, where it goes (nowhere, by default) and how to delete it:
+[`PRIVACY.md`](PRIVACY.md). Community standards for this repo: [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
 
 Built by Lerider Technologies (Netherlands) with an AI coding assistant as a development partner. Every rule has
 regression tests, and the claims in this README are limited to what those tests and the measurements above show.

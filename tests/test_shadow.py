@@ -26,7 +26,7 @@ from countersign_shadow.__main__ import demo_workspace, main
 from countersign_shadow.importers import inbox as inbox_imp
 from countersign_shadow.importers import transactions as tx
 from countersign_shadow.planners import make_planner, normalise_proposal
-from countersign_shadow.planners.llm import ClaudePlanner, OpenAICompatPlanner, extract_json
+from countersign_shadow.planners.llm import ClaudePlanner, OpenAICompatPlanner, extract_json, reply_text
 from countersign_shadow.shadow import draft_cards, run
 from countersign_shadow.store import Workspace
 
@@ -526,6 +526,48 @@ class TestPlannerAdapters(Base):
         c = draft_cards(self.ws, p, messages=self.ws.messages[:1])[0]
         self.assertEqual(c["action"], "no_action")
         self.assertIn("planner error", c["rationale"])
+
+    def test_local_adapter_reports_server_error_body(self):
+        class Fail500(BaseHTTPRequestHandler):  # what Ollama 0.17 sends for a model architecture it cannot load
+            def log_message(self, *a):
+                pass
+
+            def do_POST(self):
+                self.rfile.read(int(self.headers["Content-Length"]))
+                out = b'{"error":{"message":"unable to load model: /blobs/sha256-x","type":"api_error"}}'
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(out)))
+                self.end_headers()
+                self.wfile.write(out)
+
+        srv = ThreadingHTTPServer(("127.0.0.1", 0), Fail500)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        try:
+            p = OpenAICompatPlanner(base_url=f"http://127.0.0.1:{srv.server_address[1]}/v1", model="m", timeout=5)
+            c = draft_cards(self.ws, p, messages=self.ws.messages[:1])[0]
+        finally:
+            srv.shutdown()
+            srv.server_close()
+        self.assertEqual(c["action"], "no_action")
+        self.assertIn("planner error", c["rationale"])
+        self.assertIn("HTTP 500", c["rationale"])
+        self.assertIn("unable to load model", c["rationale"])
+
+    def test_reply_text_handles_thinking_models(self):
+        ans = '{"action": "flag_suspicious", "rationale": "phish"}'
+        # answer in content, thinking inline (may itself contain braces)
+        self.assertEqual(extract_json(reply_text({"content": '<think>maybe {"action": "refund"}?</think>\n' + ans})),
+                         json.loads(ans))
+        # thinking cut off (no closing tag) and nothing else -> no JSON, no crash
+        self.assertIsNone(extract_json(reply_text({"content": '<think>{"action": "refund"} hmm'})))
+        # empty content, answer only in a separate reasoning field (llama.cpp reasoning_content / Ollama reasoning)
+        for key in ("reasoning_content", "reasoning"):
+            self.assertEqual(extract_json(reply_text({"content": "", key: "so: " + ans})), json.loads(ans))
+        # content JSON wins over reasoning JSON
+        self.assertEqual(extract_json(reply_text({"content": ans, "reasoning_content": '{"action": "refund"}'})),
+                         json.loads(ans))
+        self.assertEqual(reply_text({"content": None}), "")
 
     def test_claude_adapter_with_fake_client(self):
         calls = []

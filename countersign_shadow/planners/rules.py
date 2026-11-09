@@ -34,7 +34,19 @@ P_SEND_INVOICE = re.compile(
     r"(?i)(?:stuur|stuurt|zend).{0,25}factuur|graag (?:een )?factuur|factuur (?:sturen|graag)|"
     r"send (?:us |me )?(?:an |the |a )?invoice|please invoice|invoice us")
 # the infinitive "betalen" too ("Geen aanbetaling nodig, maar wel graag vandaag betalen." was no pay context).
-P_PAY_CONTEXT = re.compile(r"(?i)factuur|invoice|herinnering|aanmaning|nota|te betalen|betaal|betalen|overmaken|pay\b|payment")
+# checks._PAY_VERB also reads storten/voldoen (NL) and transfer/settle (EN) as pay verbs, but this
+# planner gate did not, so the same "no amount/invoice word, just the verb" shape stayed silent (none) instead of
+# drafting pay_invoice (same gap as the earlier "betalen" fix: the warn-level checks never ran). Added here too, each as a
+# whole word (\b...\b): bare "stort" must not match inside the passive participle "gestort" (F11PassiveAskNameBlock,
+# test_heldout_regressions), which stays on checks.py's own structural C14 detection instead of this simple gate.
+# round 2 of the same diff: wire/remit/deposit (EN) and overboeken/overschrijven (NL) were also in
+# checks._PAY_VERB but not here. Same \b...\b discipline: bare "deposit" must not match "depositogarantie", bare
+# "overboeken"/"overschrijven" must not match the noun forms "overboeking(en)"/"overschrijving(en)" (already read
+# separately by checks._PAY_NOUN_RE). Split forms ("over te boeken/schrijven") and the German überweisen/zahlen
+# pair left out of scope.
+P_PAY_CONTEXT = re.compile(r"(?i)factuur|invoice|herinnering|aanmaning|nota|te betalen|betaal|betalen|overmaken|"
+                           r"\bstorten\b|\bstort\b|\bvoldoen\b|\bvoldoe\b|\btransfer\b|\bsettle\b|pay\b|payment|"
+                           r"\bwire\b|\bremit\b|\bdeposit\b|\boverboeken\b|\boverschrijven\b")
 P_PHISHING = re.compile(
     r"(?i)(klik|click|log ?in|inloggen|verifieer|verify|bevestig uw|confirm your|link)"
     r"[\s\S]{0,300}(geblokkeerd|blocked|suspend|opgeschort|verloopt|expire|beperkt|limited|vrijgeven|release)|"

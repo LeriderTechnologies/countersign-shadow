@@ -619,6 +619,18 @@ _NP_OPTIONAL = re.compile(r"(?i)\b(?:vrijwillig(?:e)?|niet verplicht|geen verpli
 _NP_DONATION = re.compile(r"(?i)\b(?:doneer|doneren|donatie(?:s)?|donate|donation(?:s)?|giften|"
                           r"(?:uw|je|jouw|een|de|deze|elke|iedere|vrijwillige|eenmalige|periodieke|kleine)\s+gift|"
                           r"gift(?=\s+van\b)|anbi|goede doel(?:en)?|charity|fundraising|inzamelingsactie)\b")
+# a membership-fee appeal ("If you wish to stay a member, the yearly contribution is EUR 35.00",
+# "Als u lid wilt blijven, is de jaarlijkse contributie EUR 35,00") is the same kind of appeal as a donation: it is
+# recognised ("contribution"/"bijdrage"/"contributie" are already gift nouns, _GIFT_OBJECT_RE) but was not an
+# explicit no_pay_reason trigger, so it stayed a hard block on a never-paid IBAN. member(ship)/lid(maatschap) near a
+# fee word, or "jaarlijkse/yearly/annual contribution(s)/bijdrage/contributie" on its own. Same cap/pressure gate as
+# _NP_DONATION below (via _amount_ask): a CEO-style "contribution" ask with a big amount or pay-now pressure still
+# blocks.
+_NP_MEMBERSHIP_FEE = re.compile(
+    r"(?i)\b(?:member(?:ship)?|lid(?:maatschap)?)\b[^.!?\n]{0,40}\b(?:fee|contribution(?:s)?|bijdrage(?:n)?|"
+    r"contributie)\b|\b(?:fee|contribution(?:s)?|bijdrage(?:n)?|contributie)\b[^.!?\n]{0,40}\b(?:member(?:ship)?|"
+    r"lid(?:maatschap)?)\b|\b(?:yearly|annual|jaarlijkse)\s+(?:membership\s+)?(?:contribution(?:s)?|bijdrage(?:n)?|"
+    r"contributie)\b")
 # donateurs / donors / crowdfunding (a held-out test mail "Dankzij 412 donateurs .. via de crowdfundingpagina").
 # these words DESCRIBE a campaign, they do not ask to donate, so they soften only an IBAN that carries no
 # strong pay ask (like "already paid" / "incoming"): "graag EUR 4.750 betalen aan <new IBAN> .. crowdfundingactie"
@@ -733,12 +745,14 @@ def no_pay_reason(text: str, ib: str, action: str = "") -> str | None:
     # pay a set amount to this IBAN (_amount_ask: "Graag € 4.750,00 betalen aan X voor het goede doel", "Please
     # transfer EUR 4,750.00 to X today, it is an optional donation" -- CEO fraud dressed up as charity).
     hard = None
-    if _NP_OPTIONAL.search(t) or _NP_DONATION.search(t):
+    if _NP_OPTIONAL.search(t) or _NP_DONATION.search(t) or _NP_MEMBERSHIP_FEE.search(t):
         hard = any(_amount_ask(t, s, e) for s, e in spans)
     if _NP_OPTIONAL.search(t) and not hard:
         return "the message says paying is optional"
     if _NP_DONATION.search(t) and not hard:
         return "the message is a donation appeal"
+    if _NP_MEMBERSHIP_FEE.search(t) and not hard:
+        return "the message is a membership-fee appeal"
     if _NP_QUOTE.search(t) and _NP_LATER_INVOICE.search(t) and not _NP_DEPOSIT.search(t):
         return "the message is a quote; the invoice comes later"
     if strong:
@@ -892,6 +906,7 @@ _NP_NL = {
     "the message says this is paid by direct debit (incasso)": "het bericht zegt dat dit via automatische incasso gaat",
     "the message says paying is optional": "het bericht zegt dat betalen niet verplicht is",
     "the message is a donation appeal": "het is een oproep om te doneren",
+    "the message is a membership-fee appeal": "het is een oproep voor een lidmaatschapsbijdrage",
     "the message is a quote; the invoice comes later": "het is een offerte; de factuur komt later",
     "the IBAN is where money comes FROM (incoming money)": "het IBAN is de rekening waar geld VANAF komt",
     "the message says this was already paid": "het bericht zegt dat dit al betaald is",

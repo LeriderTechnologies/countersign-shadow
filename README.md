@@ -15,14 +15,22 @@ rules, claim verification, Decimal-only money) but contains no execution path at
 ```bash
 python3 -m countersign_shadow demo            # headless run on the synthetic test set (no installs, Python 3.10+)
 python3 -m countersign_shadow start --demo    # same data in the local review page: http://127.0.0.1:8766/
-python3 -m unittest discover -s tests         # 384 tests (bare `discover` from the repo root too)
+python3 -m unittest discover -s tests         # 438 tests (bare `discover` from the repo root too)
 ```
 
 Nothing to install: PDF attachments and Outlook `.msg` files are read with vendored copies of pypdf and olefile
 (see "Third-party code and licences" below).
 
-Pilot users (non-developers) double-click `start-windows.bat`, `start-mac.command` or run `start-linux.sh`;
-the Dutch guide is in [`pilot/GIDS.md`](pilot/GIDS.md), the consent form for sharing a summary in
+Pilot users (non-developers) get a download-and-double-click bundle with Python included (no install, no PATH
+step): `python3 packaging/build_bundles.py` builds `Countersign-Shadow-Windows.zip` (python.org embeddable
+Python, PSF-signed) and `Countersign-Shadow-Mac.zip` (python-build-standalone, Apple silicon + Intel), from
+runtimes pinned by SHA-256. Double-clicking `Countersign starten` opens a plain-language Dutch start window in
+the browser (`python3 -m countersign_shadow launch`): demo, open the `mijn-gegevens` folder, start, stop. A whole
+Gmail Google Takeout export (.zip or .mbox, or a folder with hundreds of .eml files) can go in as is: Countersign
+keeps the mails about money from the last 6 months (newest 50, at most 10 from spam, trash skipped; all Takeout
+parts are one selection; small exports are kept whole). Code signing options: [`packaging/SIGNING.md`](packaging/SIGNING.md).
+From a source checkout, `start-windows.bat`, `start-mac.command` and `start-linux.sh` still work. The Dutch guide
+is in [`pilot/GIDS.md`](pilot/GIDS.md), the consent form for sharing a summary in
 [`pilot/TOESTEMMING.md`](pilot/TOESTEMMING.md).
 
 ## Screenshots

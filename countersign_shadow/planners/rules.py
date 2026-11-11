@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 
+from .. import nl
 from ..iban import find_iban_spans, find_ibans
 from ..money import MoneyError, find_amounts, find_bare_amounts, fmt, is_reported_figure, parse_signed
 from . import empty_proposal, message_text
@@ -216,11 +217,12 @@ class RulePlanner:
         elif P_REFUND.search(text) and main and order:
             p["action"] = "refund"
             p["payee"] = {"name": name, "iban": ibans[-1] if ibans else "", "email": sender}
-            p["rationale"] = f"Klant vraagt {p['amount']} EUR terug voor bestelling {p['order_ref']}."
+            p["rationale"] = f"Klant vraagt {nl.bedrag(p['amount'])} terug voor bestelling {p['order_ref']}."
         elif P_REMINDER_OUT.search(text) and inv:
             p["action"] = "send_reminder"
             p["payee"] = {"name": "", "iban": "", "email": _other_email(text, sender)}
-            p["rationale"] = f"Onze factuur {p['invoice_ref']} lijkt onbetaald; concept voor een vriendelijke herinnering."
+            p["rationale"] = (f"Factuur {p['invoice_ref']} lijkt nog niet betaald. Countersign zou een vriendelijke "
+                              "herinnering klaarzetten.")
         elif P_SEND_INVOICE.search(text) and main:
             p["action"] = "send_invoice"
             p["payee"] = {"name": name, "iban": "", "email": _other_email(text, "") or sender}
@@ -240,16 +242,17 @@ class RulePlanner:
                 p["amount"] = fmt(anchored[0])
                 p["evidence_quote"] = _sentence_with(text, anchored[1])
             p["rationale"] = (f"Factuur{' ' + p['invoice_ref'] if p['invoice_ref'] else ''} vraagt "
-                              f"{p['amount']} EUR op {ibans[-1]}.")
+                              f"{nl.bedrag(p['amount'])} op {ibans[-1]}.")
         elif P_PHISHING.search(text):
             p.update(action="flag_suspicious", amount=None,
-                     rationale="Lijkt op phishing: druk plus een link of inlogverzoek. Niet klikken.")
+                     rationale="Lijkt op phishing: het bericht vraagt je te klikken, in te loggen of iets te bevestigen, en "
+                               "dreigt met blokkeren of houdt geld vast. Niet klikken en niets invullen.")
         elif main and P_PAYOUT.search(text):
             p["action"] = "payout"
             p["payee"] = {"name": name, "iban": "", "email": _other_email(text, "") or sender}
-            p["rationale"] = f"Bericht vraagt {p['amount']} EUR te betalen aan {p['payee']['email']}."
+            p["rationale"] = f"Bericht vraagt {nl.bedrag(p['amount'])} te betalen aan {p['payee']['email']}."
         else:
-            p.update(action="no_action", amount=None, evidence_quote="", rationale="Geen betaalactie nodig.")
+            p.update(action="no_action", amount=None, evidence_quote="", rationale="Geen betaling nodig.")
         return p
 
     def plan(self, messages: list[dict]) -> list[dict]:

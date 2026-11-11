@@ -121,7 +121,7 @@
       ],
       "name": "countersign-shadow",
       "type": "application",
-      "version": "2026.11.09"
+      "version": "2026.11.11"
     },
     "properties": [
       {
@@ -129,7 +129,7 @@
         "value": "true"
       }
     ],
-    "timestamp": "2026-11-09T00:00:00+00:00",
+    "timestamp": "2026-11-11T00:00:00+00:00",
     "tools": {
       "components": [
         {

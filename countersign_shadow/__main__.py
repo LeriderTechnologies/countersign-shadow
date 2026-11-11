@@ -3,7 +3,8 @@
 
     python3 -m countersign_shadow start                 # double-click flow: import mijn-gegevens/, draft, open page
     python3 -m countersign_shadow start --demo          # same with the synthetic Studio Klei data
-    python3 -m countersign_shadow import-inbox FILES...         (.eml, .msg, .mbox, or folders)
+    python3 -m countersign_shadow launch                # plain-language Dutch start window in the browser
+    python3 -m countersign_shadow import-inbox FILES...         (.eml, .msg, .mbox, Takeout .zip, or folders)
     python3 -m countersign_shadow import-transactions FILES...  (PayPal CSV, ING / Rabobank / ASN-SNS-RegioBank
                                                                   CSV, ABN AMRO TXT, CAMT.053 XML, MT940)
     python3 -m countersign_shadow draft [--planner rules|claude|local]
@@ -31,9 +32,15 @@ from .store import Workspace
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATA = Path(os.environ.get("COUNTERSIGN_DATA") or ROOT / "pilot-data")
-INPUT_DIR = ROOT / "mijn-gegevens"
-MAIL_EXT = {".eml", ".msg", ".mbox", ".mbx"}
-TX_EXT = {".csv", ".txt", ".tab"}
+INPUT_DIR = Path(os.environ.get("COUNTERSIGN_INPUT") or ROOT / "mijn-gegevens")  # bundles: next to the start file
+MAIL_EXT = {".eml", ".msg", ".mbox", ".mbx", ".zip"}
+TX_EXT = {".csv", ".txt", ".tab", ".xml", ".sta", ".940", ".mt940", ".swi", ".mta"}  # CSV/TXT, CAMT.053, MT940
+LEES_MIJ = ("Zet hier je e-mails en je transactie-export.\n\n"
+            "E-mails: losse .eml- of .msg-bestanden, een .mbox, of je hele Gmail-export van Google Takeout "
+            "(het .zip-bestand mag zo blijven). Bij een grote export kiest Countersign zelf de mails over geld "
+            "uit de laatste 6 maanden.\n"
+            "Transacties: de .csv of .txt van PayPal, ING, Rabobank, ABN AMRO, ASN/SNS/RegioBank, "
+            "of een MT940- of CAMT.053-bestand.\n\nDeze map verlaat je computer niet.\n")
 
 
 def _planner_from_args(a) -> object:
@@ -48,7 +55,10 @@ def _planner_from_args(a) -> object:
 
 def cmd_import_inbox(ws: Workspace, paths: list[str]) -> int:
     problems: list[str] = []
-    msgs = inbox_imp.import_paths(paths, problems)
+    info: list[str] = []
+    msgs = inbox_imp.import_paths(paths, problems, info)
+    for line in info:
+        print(f"[inbox] {line}")
     added, total = ws.merge("messages", msgs)
     print(f"[inbox] {len(msgs)} messages read, {added} new, {total} in workspace")
     pdfs = [p for m in msgs for p in m.get("pdfs") or []]
@@ -69,7 +79,8 @@ def cmd_import_tx(ws: Workspace, paths: list[str], fmt: str = "auto") -> int:
         try:
             kind, rows = tx_imp.import_file(p, fmt, warnings)
         except tx_imp.ImportError_ as exc:
-            print(f"[transactions] {p}: {exc}")
+            print(f"[transactions] {Path(p).name}: dit bankbestand kent Countersign (nog) niet. Laat het ons weten; "
+                  f"stuur het bestand niet op. ({exc})")
             continue
         added, total = ws.merge("transactions", rows)
         added_all += added
@@ -112,8 +123,8 @@ def serve(ws: Workspace, port: int, open_browser: bool = True) -> None:
 
 
 def _starts_with_from(p: Path) -> bool:
-    with open(p, "rb") as fh:
-        return fh.read(5) == b"From "
+    from .importers.bulk import is_mbox_file
+    return is_mbox_file(p)
 
 
 def import_folder(ws: Workspace, folder: Path) -> tuple[int, int]:
@@ -156,6 +167,9 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("serve")
     s.add_argument("--port", type=int, default=8766)
     s.add_argument("--no-browser", action="store_true")
+    s = sub.add_parser("launch", help="plain-language Dutch start window in the browser (double-click files)")
+    s.add_argument("--port", type=int, default=8765)
+    s.add_argument("--no-browser", action="store_true")
     sub.add_parser("summary")
     sub.add_parser("demo")
     a = ap.parse_args(argv)
@@ -171,6 +185,10 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\n[demo] rule planner matches the expected action+verdict on {hits}/{len(cards)} messages. "
                   "Nothing was executed; there is no code that could.")
         return 0
+
+    if a.cmd == "launch":
+        from . import launcher
+        return launcher.main(ROOT, INPUT_DIR, a.port, not a.no_browser)
 
     if a.cmd == "start" and a.demo and a.data == str(DEFAULT_DATA):
         a.data = str(ROOT / "demo-data")  # keep the demo apart from the user's own pilot data
@@ -209,8 +227,7 @@ def main(argv: list[str] | None = None) -> int:
             INPUT_DIR.mkdir(exist_ok=True)
             readme = INPUT_DIR / "LEES-MIJ.txt"
             if not readme.exists():
-                readme.write_text("Zet hier je e-mails (.eml, .msg of .mbox) en je transactie-export (.csv of .txt van "
-                                  "PayPal, ING, Rabobank of ABN AMRO).\nDeze map verlaat je computer niet.\n",
+                readme.write_text(LEES_MIJ,
                                   encoding="utf-8")
             import_folder(ws, INPUT_DIR)
             if not ws.messages:

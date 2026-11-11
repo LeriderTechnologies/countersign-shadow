@@ -9,10 +9,12 @@ from __future__ import annotations
 import html
 import json
 import secrets
+import sys
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from . import feedback as fbmod
+from . import nl
 from .store import Workspace
 
 CSS = """
@@ -31,7 +33,7 @@ main{max-width:900px;margin:0 auto;padding:8px 16px 48px}.mute{color:var(--mute)
 .amt{font-size:20px;font-weight:650}.reason{background:var(--badbg);color:var(--bad);border-radius:8px;padding:6px 10px;margin:6px 0;font-size:15px}
 .reason.w{background:var(--warnbg);color:var(--warn)}.reason.g{background:var(--okbg);color:var(--ok)}
 details{margin:6px 0}summary{cursor:pointer;color:var(--mute);font-size:14px}pre{white-space:pre-wrap;font:14px/1.45 system-ui,sans-serif;margin:6px 0}
-ul.checks{list-style:none;padding:0;margin:6px 0;font-size:13px}.y{color:var(--ok)}.n{color:var(--bad)}
+ul.checks{list-style:none;padding:0;margin:6px 0;font-size:13px}.y{color:var(--ok)}.n{color:var(--bad)}.w{color:var(--warn)}
 form.fb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
 button{font:inherit;border-radius:8px;border:1px solid var(--line);padding:6px 14px;cursor:pointer;background:var(--card);color:var(--ink)}
 button.right{border-color:var(--ok);color:var(--ok)}button.wrong{border-color:var(--warn);color:var(--warn)}
@@ -40,9 +42,11 @@ button.wrong.on{background:var(--warn)}button.dangerous.on{background:var(--bad)
 input[type=text]{font:inherit;flex:1 1 220px;min-width:0;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 label{font-size:14px;color:var(--mute)}.stats{display:flex;gap:10px;flex-wrap:wrap}.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px}
 .stat b{display:block;font-size:20px}a{color:var(--acc)}
+table.sum{border-collapse:collapse;font-size:14px}table.sum td,table.sum th{border:1px solid var(--line);padding:3px 10px;text-align:left}
 """
 
 CHECK_SEV = {"block": "", "warn": " w"}
+CHECK_MARK = {"block": ("n", "✗"), "warn": ("w", "⚠")}
 
 
 def e(x) -> str:
@@ -55,14 +59,24 @@ def _payee(c: dict) -> str:
     return " · ".join(e(b) for b in bits if b)
 
 
+def _planner(c: dict) -> str:
+    """Only worth a word when it is not the default offline rules (e.g. a Claude or local-model run)."""
+    name = c.get("planner") or ""
+    return "" if name.lower().startswith("rules") else f" · beoordeeld door {e(nl.planner(name))}"
+
+
 def render_card(c: dict, msg: dict | None, fb: dict | None, token: str) -> str:
-    amount = f'<div class="amt">€ {e(c["amount"])}</div>' if c.get("amount") and c["action"] != "no_action" else ""
+    amount = f'<div class="amt">{e(nl.bedrag(c["amount"]))}</div>' if c.get("amount") and c["action"] != "no_action" else ""
+    failed = {nl.rule_id(ch["rule"]) for ch in c["checks"] if not ch["ok"]}
+    # C15 (asked before in another mail) already names the other card; C11 (same card twice) would repeat it.
     reasons = "".join(
-        f'<div class="reason{CHECK_SEV.get(ch["severity"], "")}">{e(ch["uitleg"] or ch["detail"])}</div>'
-        for ch in c["checks"] if not ch["ok"]) + "".join(
+        f'<div class="reason{CHECK_SEV.get(ch["severity"], "")}">{e(ch["uitleg"] or nl.regel(ch["rule"], False))}</div>'
+        for ch in c["checks"] if not ch["ok"] and not (nl.rule_id(ch["rule"]) == "C11" and "C15" in failed)) + "".join(
         f'<div class="reason g">{e(ch["goed"])}</div>' for ch in c["checks"] if ch["ok"] and ch.get("goed"))
-    checks = "".join(f'<li class="{"y" if ch["ok"] else "n"}">{"✓" if ch["ok"] else "✗"} {e(ch["rule"])}: '
-                     f'{e(ch["detail"])}</li>' for ch in c["checks"])
+    # Plain-Dutch check names only; the rule id and the technical detail stay in cards.json.
+    checks = "".join(
+        f'<li class="{cls}">{sym} {e(nl.regel(ch["rule"], ch["ok"]))}</li>'
+        for ch in c["checks"] for cls, sym in [("y", "✓") if ch["ok"] else CHECK_MARK.get(ch["severity"], ("n", "✗"))])
     body = e(msg.get("body", "")) if msg else "(bericht niet gevonden)"
     for pdf in (msg or {}).get("pdfs") or []:
         body += f"\n\n--- PDF-bijlage {e(pdf.get('name', ''))} ---\n" + e(pdf.get("text") or
@@ -73,26 +87,31 @@ def render_card(c: dict, msg: dict | None, fb: dict | None, token: str) -> str:
     return f"""<section class="box" id="{e(c['id'])}">
 <div class="top"><h2>{e(c['action_nl'])}: {e(c['subject'])}</h2>
 <span class="badge v-{e(c['verdict'])}">{e(c['verdict_nl'])}</span></div>
-<div class="mute">Van {e(c['from'])} · {e(c['date'])} · planner: {e(c['planner'])}</div>
+<div class="mute">Van {e(c['from'])} · {e(nl.datum(c['date']))}{_planner(c)}</div>
 {amount}<div>{_payee(c)}</div>
 <p class="mute">{e(c['rationale'])}</p>{reasons}
-<details><summary>Bericht en controles tonen</summary><pre>{body}</pre><ul class="checks">{checks}</ul></details>
+<details><summary>Bericht en alle controles tonen</summary><pre>{body}</pre><ul class="checks">{checks}</ul></details>
 <form class="fb" method="post" action="/feedback">
 <input type="hidden" name="csrf" value="{token}"><input type="hidden" name="card" value="{e(c['id'])}">
-<span class="mute">Klopt dit oordeel?</span>{btn}
+<span class="mute">{f"Jouw oordeel: <b>{fbmod.MARK_NL[mark]}</b> (klik om te wijzigen)" if mark in fbmod.MARK_NL
+                      else "Klopt dit oordeel?"}</span>{btn}
 <input type="text" name="comment" placeholder="Opmerking (optioneel)" value="{e((fb or {}).get('comment', ''))}">
 <label><input type="checkbox" name="may_quote" value="1"{" checked" if (fb or {}).get("may_quote") else ""}>
-mag geciteerd worden (anoniem)</label></form></section>"""
+Lerider mag deze opmerking anoniem citeren</label></form></section>"""
 
 
-def page(title: str, inner: str) -> bytes:
+def page(title: str, inner: str, home_url: str | None = None) -> bytes:
+    home = f' <a href="{e(home_url)}">← Startscherm</a>' if home_url else ""
     return f"""<!doctype html><html lang="nl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><style>{CSS}</style></head>
-<body><header><h1>Countersign Shadow</h1><div class="mute">Schaduwmodus: er kan niets betaald of verstuurd worden.
-Alles blijft op deze computer.</div></header><main>{inner}</main></body></html>""".encode()
+<body><header><h1>Countersign Shadow</h1><div class="mute">Proefmodus: Countersign kijkt alleen mee. Er kan niets betaald of verstuurd worden.
+Alles blijft op deze computer.{home}</div></header><main>{inner}</main></body></html>""".encode()
 
 
-def make_handler(ws: Workspace, token: str):
+def make_handler(ws: Workspace, token: str, home_url: str | None = None):
+    def page(title: str, inner: str) -> bytes:
+        return _page(title, inner, home_url)
+
     class H(BaseHTTPRequestHandler):
         def log_message(self, *a):  # keep the terminal quiet
             pass
@@ -115,24 +134,24 @@ def make_handler(ws: Workspace, token: str):
             if path == "/samenvatting":
                 s = fbmod.summary(ws)
                 md = fbmod.summary_markdown(s)
-                inner = (f'<p><a href="/">← terug</a></p><section class="box"><pre>{e(md)}</pre>'
+                inner = (f'<p><a href="/">← terug</a></p><section class="box">{md_html(md)}'
                          f'<form method="post" action="/samenvatting"><input type="hidden" name="csrf" value="{token}">'
                          f'<button class="primary">Bewaar als bestand om te delen</button></form></section>')
                 return self._send(200, page("Samenvatting", inner))
-            self._send(404, b"not found", "text/plain")
+            self._send(404, "Pagina niet gevonden.".encode(), "text/plain; charset=utf-8")
 
         def do_POST(self):
             n = int(self.headers.get("Content-Length") or 0)
             if n > 20000:
-                return self._send(413, b"too large", "text/plain")
+                return self._send(413, "Te veel tekst in één keer.".encode(), "text/plain; charset=utf-8")
             form = {k: v[0] for k, v in urllib.parse.parse_qs(self.rfile.read(n).decode("utf-8", "replace")).items()}
             if not secrets.compare_digest(form.get("csrf", ""), token):
-                return self._send(403, b"bad token: reload the page", "text/plain")
+                return self._send(403, "Verouderde pagina: laad de pagina opnieuw.".encode(), "text/plain; charset=utf-8")
             path = urllib.parse.urlparse(self.path).path
             if path == "/feedback":
                 card = next((c for c in ws.load("cards", []) if c["id"] == form.get("card")), None)
                 if not card or form.get("mark") not in fbmod.MARKS:
-                    return self._send(400, b"unknown card or mark", "text/plain")
+                    return self._send(400, "Onbekende kaart of knop: laad de pagina opnieuw.".encode(), "text/plain; charset=utf-8")
                 fbmod.record(ws, card, form["mark"], form.get("comment", ""), form.get("may_quote") == "1")
                 return self._send(303, b"", extra={"Location": f"/#{card['id']}"})
             if path == "/samenvatting":
@@ -140,7 +159,7 @@ def make_handler(ws: Workspace, token: str):
                 return self._send(200, page("Opgeslagen", f'<p><a href="/">← terug</a></p><section class="box">'
                                   f'Opgeslagen in <b>{e(out)}</b>. Lees het na en deel het alleen als je dat wilt.'
                                   f'</section>'))
-            self._send(404, b"not found", "text/plain")
+            self._send(404, "Pagina niet gevonden.".encode(), "text/plain; charset=utf-8")
 
         def index(self) -> bytes:
             cards = ws.load("cards", [])
@@ -151,14 +170,56 @@ def make_handler(ws: Workspace, token: str):
             cards = sorted(cards, key=lambda c: (c["id"] in fb, order.get(c["verdict"], 9), c["date"]))
             head = (f'<div class="stats"><div class="stat"><b>{len(cards)}</b>kaarten</div>'
                     f'<div class="stat"><b>{done}</b>beoordeeld</div></div>'
-                    f'<p class="mute">Kijk per kaart of Countersign het goed inschat. <b>Goed</b> = klopt; <b>fout</b> = '
-                    f'verkeerde actie of onnodig tegengehouden; <b>gevaarlijk</b> = had schade kunnen doen als je het '
-                    f'had goedgekeurd. Klaar? <a href="/samenvatting">Bekijk de samenvatting</a>.</p>')
+                    f'<p class="mute">Kijk per kaart of Countersign het goed inschat. <b>Goed</b> = Countersign heeft gelijk. '
+                    f'<b>Fout</b> = Countersign heeft het mis, maar zonder schade (bijvoorbeeld onnodig '
+                    f'tegengehouden). <b>Gevaarlijk</b> = Countersign laat iets door waardoor je geld had kunnen '
+                    f'verliezen. Klaar? <a href="/samenvatting">Bekijk de samenvatting</a>.</p>')
             if not cards:
                 head += '<p class="box">Nog geen kaarten. Lees eerst je e-mail en transacties in (zie de gids).</p>'
             return page("Countersign Shadow", head + "".join(
                 render_card(c, msgs.get(c["source_id"]), fb.get(c["id"]), token) for c in cards))
     return H
+
+
+def md_html(md: str) -> str:
+    """The summary markdown (feedback.summary_markdown: #/## headings, '- ' items, | tables |, text) as HTML."""
+    out, para, items, rows = [], [], [], []
+
+    def flush():
+        if para:
+            out.append(f"<p>{e(' '.join(para))}</p>")
+            para.clear()
+        if items:
+            out.append("<ul>" + "".join(f"<li>{e(x)}</li>" for x in items) + "</ul>")
+            items.clear()
+        if rows:
+            head, body = rows[0], [r for r in rows[1:] if not set("".join(r)) <= set("-: ")]
+            out.append('<table class="sum"><tr>' + "".join(f"<th>{e(x)}</th>" for x in head) + "</tr>" + "".join(
+                "<tr>" + "".join(f"<td>{e(x)}</td>" for x in r) + "</tr>" for r in body) + "</table>")
+            rows.clear()
+
+    for line in md.splitlines():
+        if line.startswith("|"):
+            rows.append([x.strip() for x in line.strip().strip("|").split("|")])
+            continue
+        if rows:
+            flush()
+        if line.startswith("## "):
+            flush()
+            out.append(f'<h3>{e(line[3:])}</h3>')
+        elif line.startswith("# "):
+            flush()
+            out.append(f'<h2 style="font-size:18px">{e(line[2:])}</h2>')
+        elif line.startswith("- "):
+            if para:
+                flush()
+            items.append(line[2:])
+        elif not line.strip():
+            flush()
+        else:
+            para.append(line)
+    flush()
+    return "".join(out)
 
 
 def save_summary(ws: Workspace):
@@ -170,6 +231,16 @@ def save_summary(ws: Workspace):
     return out
 
 
-def make_server(ws: Workspace, port: int = 8766) -> ThreadingHTTPServer:
+class LocalServer(ThreadingHTTPServer):
+    """On Windows SO_REUSEADDR lets a second server bind a port that is already in use; then a second double-click
+    would start a second, silent copy. Without it, binding fails with OSError and the caller can react."""
+    allow_reuse_address = not sys.platform.startswith("win")
+    daemon_threads = True
+
+
+def make_server(ws: Workspace, port: int = 8766, home_url: str | None = None) -> ThreadingHTTPServer:
     token = secrets.token_urlsafe(24)
-    return ThreadingHTTPServer(("127.0.0.1", port), make_handler(ws, token))
+    return LocalServer(("127.0.0.1", port), make_handler(ws, token, home_url))
+
+
+_page = page

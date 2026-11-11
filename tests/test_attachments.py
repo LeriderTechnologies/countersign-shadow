@@ -224,7 +224,7 @@ class TestPdfChecks(AttBase):
         self.assertEqual(c["amount"], "312.40")
         self.assertEqual(self.failed(c), {"P4"})
         self.assertEqual(c["verdict"], "warn")
-        self.assertIn("1312.40", self.check(c, "P4")["uitleg"])
+        self.assertIn("€ 1.312,40", self.check(c, "P4")["uitleg"])
 
     def test_matching_pdf_passes(self):
         m = self.import_eml(eml(f"Beste Sanne,\n\nFactuur F-2026-0500. Te betalen € 287,15 op {nl(samples.KARTON)}."

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""import-inbox: read .eml files, .mbox mailboxes and Outlook .msg files into plain message dicts.
+"""import-inbox: read .eml files, .mbox mailboxes, Outlook .msg files and .zip exports into plain message dicts.
 
 Nothing is sent anywhere. PDF attachments are read for their text layer (optional pypdf, see attachments.py) so the
 checks can compare the invoice's IBAN and total with the mail text and with your own payments. Other attachments
@@ -18,6 +18,7 @@ from email.utils import parseaddr, parsedate_to_datetime
 from pathlib import Path
 
 from . import attachments as att
+from . import bulk
 from . import msg as msglib
 
 MAX_BODY = 8000  # characters kept per message (enough for any payment request; keeps the planner input small)
@@ -112,25 +113,47 @@ def read_msg(path: Path) -> dict:
             "attachments": names, "pdfs": pdfs, "origin": Path(path).name}
 
 
-def import_paths(paths: list[str | Path], problems: list[str] | None = None) -> list[dict]:
-    """Accept .eml, .msg, .mbox files (or files without extension that start with 'From '), and folders.
-    Files that cannot be read are skipped; a Dutch explanation is appended to `problems` if given."""
-    msgs: list[dict] = []
+def _expand(paths) -> list[Path]:
+    out: list[Path] = []
     for p in map(Path, paths):
         if p.is_dir():
-            msgs.extend(import_paths(sorted(x for x in p.iterdir() if x.is_file()), problems))
-            continue
-        suffix = p.suffix.lower()
-        if suffix == ".eml":
-            msgs.append(read_eml(p))
-        elif suffix == ".msg":
+            out.extend(_expand(sorted(x for x in p.iterdir() if not x.name.startswith("."))))
+        elif p.is_file():
+            out.append(p)
+    return out
+
+
+def import_paths(paths: list[str | Path], problems: list[str] | None = None,
+                 info: list[str] | None = None, now=None) -> list[dict]:
+    """Accept .eml, .msg, .mbox files (or files without extension that start with 'From '), .zip exports
+    (Google Takeout) and folders (searched recursively). Files that cannot be read are skipped; a Dutch
+    explanation is appended to `problems` if given.
+
+    All .eml / .mbox / .zip mail goes through one bulk.Selector: more than bulk.SMALL mails in total -> only the
+    mails about money from the last bulk.MONTHS months (newest bulk.LIMIT); fewer are kept whole. .msg files are
+    always kept. One Dutch summary line is appended to `info`."""
+    files = _expand(paths)
+    msgs: list[dict] = []
+    msg_files = [p for p in files if p.suffix.lower() == ".msg"]
+    sel = bulk.Selector(now=now)  # one selection over every export in this import (all Takeout parts together)
+    with bulk.new_tmpdir() as tmp:
+        for p in files:
+            suffix = p.suffix.lower()
+            if suffix == ".eml":
+                sel.feed(p.read_bytes(), p.name)
+            elif suffix == ".zip":
+                bulk.select_zip(p, sel, msg_files, problems, tmp)
+            elif suffix != ".msg" and bulk.is_mbox_file(p):
+                bulk.select_mbox(p, sel)
+        msgs.extend(parse_message(bulk.parse_raw(raw), origin) for raw, origin in sel.finish())
+        if info is not None and sel.seen:
+            info.append(sel.summary_nl())
+        for p in msg_files:
             try:
                 msgs.append(read_msg(p))
             except msglib.MsgUnsupported as exc:
                 if problems is not None:
                     problems.append(f"{p.name}: {exc}")
-        elif suffix in (".mbox", ".mbx") or (suffix == "" and p.read_bytes()[:5] == b"From "):
-            msgs.extend(read_mbox(p))
     seen, unique = set(), []
     for m in msgs:
         if m["id"] not in seen:

@@ -20,6 +20,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from . import iban as ibanlib
+from . import nl
 from . import official
 from .money import MoneyError, find_amounts, find_bare_amounts, is_reported_figure, parse_amount
 from .planners import MONEY_OUT, message_text
@@ -1039,6 +1040,119 @@ def _mentions(tx: dict, ref: str) -> bool:
     return len(r) >= 3 and (r in _alnum(tx.get("description")) or r in _alnum(tx.get("reference")))
 
 
+# W4 (warn) names the link or login ask on a phishing card. Before, a flag_suspicious card only showed
+# W1/W2 ("Geen druk of haast") while its reason said phishing. W4 reads, in the message itself: links (http(s):// or
+# www.) whose domain imitates a known bank / payee / platform or differs from the sender's domain, a sender domain
+# that imitates one, and a request to log in or (re-)enter or confirm bank or login details. The uitleg shows the
+# bare domain as plain text (the page escapes it and never makes it clickable). The official domains below
+# (belastingdienst.nl, duo.nl, cjib.nl ... the sources of official.py) never count as a lookalike or foreign link.
+# Shown on flag_suspicious cards only: the verdict there is always "flagged", so no other card and no scorecard moves.
+_URL_RE = re.compile(r"(?i)\b(?:https?://(?:[^\s/@<>\"']*@)?|www\.)([a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                     r"(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+)")
+# brand token -> (display name, official registrable domains as (label, tld) pairs). The pairs keep the no-endpoint
+# guard in tests/test_shadow.py meaningful (no payment/bank URL in the code): these names are only compared, never
+# opened. Short tokens (ing, asn, sns, duo, kvk, cjib) must be a whole label part of the domain ("ing-zakelijk");
+# longer ones may sit inside a label ("belasting-dienst-nl").
+_BRANDS = {
+    "ing": ("ING", (("ing", "nl"), ("ing", "com"), ("ing", "be"))),
+    "rabobank": ("Rabobank", (("rabobank", "nl"), ("rabobank", "com"))),
+    "abnamro": ("ABN AMRO", (("abnamro", "nl"), ("abnamro", "com"))),
+    "bunq": ("bunq", (("bunq", "com"),)),
+    "knab": ("Knab", (("knab", "nl"),)),
+    "asn": ("ASN Bank", (("asnbank", "nl"),)),
+    "sns": ("SNS", (("snsbank", "nl"), ("sns", "nl"))),
+    "regiobank": ("RegioBank", (("regiobank", "nl"),)),
+    "triodos": ("Triodos", (("triodos", "nl"), ("triodos", "com"))),
+    "paypal": ("PayPal", (("paypal", "com"), ("paypal", "nl"), ("paypal", "me"))),
+    "tikkie": ("Tikkie", (("tikkie", "me"), ("tikkie", "nl"))),
+    "belastingdienst": ("de Belastingdienst", (("belastingdienst", "nl"),)),
+    "digid": ("DigiD", (("digid", "nl"),)),
+    "mijnoverheid": ("MijnOverheid", (("mijnoverheid", "nl"),)),
+    "duo": ("DUO", (("duo", "nl"),)),
+    "cjib": ("het CJIB", (("cjib", "nl"),)),
+    "kvk": ("de KVK", (("kvk", "nl"),)),
+    "postnl": ("PostNL", (("postnl", "nl"), ("postnl", "com"))),
+    "marktplaats": ("Marktplaats", (("marktplaats", "nl"),)),
+    "microsoft": ("Microsoft", (("microsoft", "com"), ("office", "com"), ("live", "com"), ("outlook", "com"))),
+}
+_OFFICIAL_DOMAINS = {f"{lab}.{tld}" for _n, ds in _BRANDS.values() for lab, tld in ds} | {"overheid.nl", "rijksoverheid.nl"}
+_LEET = str.maketrans({"1": "l", "0": "o", "3": "e", "5": "s", "4": "a", "7": "t"})
+LOGIN_ASK_RE = re.compile(
+    r"(?i)\b(?:log\s?in|inloggen|login|meld u aan|aanmelden|sign in|"
+    r"verifi(?:eer|eren|ëren|ëer|y|cation)|bevestig(?:t|en)?\s+(?:uw|je|jouw|hier)?\s*(?:gegevens|rekening|identiteit|"
+    r"account|bankgegevens|betaalgegevens)|(?:uw|je)\s+gegevens\s+(?:niet\s+)?bevestig(?:t|en)?|"
+    r"confirm (?:your )?(?:details|account|identity|bank)|"
+    r"(?:bank|betaal|inlog|rekening)gegevens\s+(?:opnieuw\s+)?(?:in(?:vullen|voeren)|bijwerken|updaten|controleren)|"
+    r"vul\s+(?:uw|je)\s+(?:bank|betaal|inlog|rekening)?gegevens|wachtwoord|pincode|password|"
+    r"update (?:your )?(?:payment|bank|account) (?:details|information))")
+
+# A click ask without a written-out link ("Click the link below", "via deze link"): named only when no URL was found.
+CLICK_ASK_RE = re.compile(r"(?i)\b(?:(?:klik|click|tik|tap|druk)\b.{0,25}\b(?:link|hier|here|below|onder|knop|button)|"
+                          r"via (?:deze|de|onderstaande) link|(?:the|this) link below)\b")
+
+def _registrable(host: str) -> str:
+    parts = host.lower().strip(".").split(".")
+    return ".".join(parts[-2:]) if len(parts) >= 2 else host.lower()
+
+
+def _is_official(host: str) -> bool:
+    h = host.lower().strip(".")
+    return any(h == d or h.endswith("." + d) for d in _OFFICIAL_DOMAINS)
+
+
+def _imitates(host: str) -> str | None:
+    """Display name of the brand this domain imitates ('ing-zakelijk-verificatie.example' -> 'ING',
+    'paypa1-secure.example' -> 'PayPal'), or None. The brand's own domains are no imitation."""
+    if not host or _is_official(host):
+        return None
+    name = host.lower().translate(_LEET).replace("rn", "m")
+    labels = name.split(".")[:-1] or name.split(".")
+    tokens = {t for lab in labels for t in lab.split("-") if t}
+    joined = "".join(labels).replace("-", "")
+    for token, (display, _doms) in _BRANDS.items():
+        if token in tokens or (len(token) >= 5 and token in joined):
+            return display
+    return None
+
+
+def _link_login_check(message: dict, text: str) -> Check:
+    rule = "W4 no suspicious link or login request"
+    sender = (message.get("from") or "").split("@")[-1].strip().lower()
+    hosts = list(dict.fromkeys(m.group(1).lower().rstrip(".") for m in _URL_RE.finditer(text)))
+    found_en, found_nl = [], []
+    for h in hosts:
+        if _is_official(h):
+            continue
+        brand = _imitates(h)
+        if brand:
+            found_en.append(f"link to {h} (imitates {brand})")
+            found_nl.append(f"De link gaat naar {h}. Dat lijkt op {brand}, maar het is niet het echte adres.")
+        elif sender and _registrable(h) != _registrable(sender):
+            found_en.append(f"link to {h} (not the sender's domain {sender})")
+            found_nl.append(f"De link gaat naar {h}, niet naar het domein van de afzender ({sender}).")
+    sbrand = _imitates(sender)
+    if sbrand and not any(_registrable(h) == _registrable(sender) and _imitates(h) for h in hosts):
+        found_en.append(f"sender domain {sender} imitates {sbrand}")
+        found_nl.append(f"De afzender ({sender}) lijkt op {sbrand}, maar het is niet het echte adres.")
+    asks = list(LOGIN_ASK_RE.finditer(text))
+    ask = next((a for a in asks if "niet" not in a.group(0).lower()), asks[0] if asks else None)
+    click = None if hosts else CLICK_ASK_RE.search(text)
+    wants = []
+    if click:
+        found_en.append(f'asks to click a link "{click.group(0)}"')
+        wants.append(f'op een link te klikken ("{click.group(0)}")')
+    if ask:
+        found_en.insert(0, f'login/details request "{ask.group(0)}"')
+        wants.append(f'in te loggen, iets te bevestigen of gegevens in te vullen ("{ask.group(0)}")')
+    if wants:
+        found_nl.insert(0, "Het bericht vraagt je " + " en ".join(wants) + ".")
+    if not found_en:
+        return Check(rule, True, "none found", "warn")
+    return Check(rule, False, "found " + "; ".join(found_en), "warn",
+                 " ".join(found_nl) + " Klik niet op de link en vul niets in. Ga zelf naar de website of app die je "
+                                      "al kent, of bel een nummer dat je al had.")
+
+
 def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
              earlier: list[dict] | None = None, earlier_messages: list[dict] | None = None) -> list[Check]:
     """Return all checks for one proposal. `history` = imported transactions; `earlier` = cards drafted
@@ -1056,7 +1170,7 @@ def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
     # Warnings that apply to every message, whatever the planner thought of it.
     m = PRESSURE_RE.search(text)
     checks.append(Check("W1 no pressure language", not m, f'found "{m.group(0)}"' if m else "none found", "warn",
-                        f'Het bericht zet druk ("{m.group(0)}"). Fraudeurs doen dat om je controle over te slaan.'
+                        f'Het bericht zet je onder druk ("{m.group(0)}"). Fraudeurs doen dat zodat je niet eerst controleert.'
                         if m else ""))
     m = BANK_CHANGE_RE.search(text)
     checks.append(Check("W2 no change of bank details", not m, f'found "{m.group(0)}"' if m else "none found", "warn",
@@ -1069,6 +1183,9 @@ def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
                             "; ".join(f"{p['name']}: {p['warning']}" for p in unread) or f"{len(pdfs)} read", "warn",
                             "Kan PDF niet lezen: " + "; ".join(f"{p['name']} ({p['warning']})" for p in unread) +
                             ". Controleer IBAN en bedrag op de factuur zelf." if unread else ""))
+
+    if action == "flag_suspicious":
+        checks.append(_link_login_check(message, text))  # what made it look like phishing
 
     bank_change = bool(BANK_CHANGE_RE.search(text))
     if action in ("no_action", "flag_suspicious"):
@@ -1128,7 +1245,7 @@ def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
         ib = ibanlib.normalise(payee.get("iban"))
         valid = ibanlib.is_valid(ib)
         checks.append(Check("C4 IBAN checksum valid", valid, ib or "(none)",
-                            uitleg=f"IBAN {ib or '(geen)'} is ongeldig (controlegetal klopt niet)."))
+                            uitleg=f"Rekeningnummer {ib or '(geen)'} kan niet bestaan (tikfout of nep)."))
         in_msg = bool(ib) and ib in ibanlib.normalise(text)
         checks.append(Check("V3 IBAN appears in the message", in_msg, ib or "(none)",
                             uitleg="Dit IBAN staat niet in het bericht."))
@@ -1154,7 +1271,7 @@ def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
         if hit:
             checks.append(Check("C6 invoice not already paid", False,
                                 f"{ref} paid on {hit['date']} ({hit['amount']} {hit['currency']})",
-                                uitleg=f"Factuur {ref} is al betaald op {hit['date']}. Niet nog eens betalen."))
+                                uitleg=f"Factuur {ref} is al betaald op {nl.datum(hit['date'])}. Niet nog eens betalen."))
         else:
             twin = next((t for t in out_tx if t["iban"] == ib and Decimal(t["amount"]) == -amount and
                          (message.get("date") and (_days_between(t["date"], message["date"]) or 0)
@@ -1162,7 +1279,7 @@ def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
             checks.append(Check("C6 invoice not already paid", twin is None,
                                 f"same amount paid to same IBAN on {twin['date']}" if twin else
                                 (f"no payment mentions {ref}" if ref else "no invoice number to match"),
-                                "warn", uitleg=f"Hetzelfde bedrag ging op {twin['date']} al naar dit IBAN. "
+                                "warn", uitleg=f"Hetzelfde bedrag ging op {nl.datum(twin['date'])} al naar dit IBAN. "
                                                "Dubbele factuur?" if twin else ""))
 
     if action == "refund":
@@ -1179,7 +1296,8 @@ def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
             room = got - back
             checks.append(Check("C7 refund matches a payment you received", amount <= room,
                                 f"{amount} <= received {got} - refunded {back} = {room}",
-                                uitleg=f"Gevraagd {amount}, maar de klant betaalde {got} (al terug: {back})."))
+                                uitleg=f"De klant vraagt {nl.bedrag(amount)} terug, maar betaalde {nl.bedrag(got)}"
+                                + (f" en kreeg al {nl.bedrag(back)} terug." if back else ".")))
 
     if action == "payout":
         email = (payee.get("email") or "").lower()
@@ -1198,7 +1316,7 @@ def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
         hit = next((t for t in in_tx if ref and _mentions(t, ref)), None)
         checks.append(Check("C10 customer has not paid yet", hit is None,
                             f"{ref} received on {hit['date']}" if hit else f"no incoming payment mentions {ref}",
-                            uitleg=f"De klant heeft {ref} al betaald op {hit['date']}. Geen herinnering sturen."
+                            uitleg=f"De klant heeft factuur {ref} al betaald op {nl.datum(hit['date'])}. Geen herinnering sturen."
                             if hit else ""))
 
     if earlier is not None and action in MONEY_OUT | {"send_invoice", "send_reminder"}:
@@ -1206,7 +1324,7 @@ def evaluate(proposal: dict, message: dict, history: list[dict], policy: Policy,
         dup = next((c for c in earlier if _dupe_key(c) == key), None)
         checks.append(Check("C11 not a duplicate of another card", dup is None,
                             f"same as card {dup['id']}" if dup else "first of its kind",
-                            uitleg=f"Dit is dezelfde actie als kaart {dup['id']}." if dup else ""))
+                            uitleg=f"Dit is dezelfde actie als de kaart \"{dup.get('subject') or dup['id']}\"." if dup else ""))
     return checks
 
 
@@ -1321,10 +1439,11 @@ def _limit_check(action: str, amount: Decimal, payee_ib: str, out_tx: list[dict]
     transfer between your own accounts) has no limit. In a no-pay context (no_pay_reason) a failed limit warns."""
     rule = "C3 per-action limit"
     flat = Decimal(policy.limits.get(action, "0"))
-    uitleg = f"Bedrag {amount} is hoger dan jouw limiet van {{}} voor deze actie."
+    grens = "je eigen grens" if action in policy.explicit_limits else "de grens die Countersign standaard gebruikt"
+    uitleg = f"{nl.bedrag(amount)} is hoger dan {grens} ({{}})."
     if action == "pay_invoice" and payee_ib and payee_ib in own_accounts(history):
         return Check(rule, True, f"{payee_ib} is your own account: no limit for a transfer between your own accounts")
-    c = Check(rule, amount <= flat, f"{amount} <= {flat}", uitleg=uitleg.format(flat))
+    c = Check(rule, amount <= flat, f"{amount} <= {flat}", uitleg=uitleg.format(nl.bedrag(flat)))
     if action == "pay_invoice" and payee_ib and action not in policy.explicit_limits:
         past = [-Decimal(t["amount"]) for t in out_tx if t["iban"] == payee_ib]
         if past:
@@ -1333,9 +1452,9 @@ def _limit_check(action: str, amount: Decimal, payee_ib: str, out_tx: list[dict]
             ok = amount <= lim
             c = Check(rule, ok, f"{amount} <= {lim} (1.5x your largest earlier payment to this IBAN, {top})",
                       "block" if amount > flat else "warn",
-                      f"Bedrag {amount} is meer dan 1,5x je grootste eerdere betaling aan dit IBAN ({top})."
-                      + (f" Ook hoger dan je algemene limiet van {flat}." if amount > flat else
-                         " Klopt dit bedrag?"))
+                      f"{nl.bedrag(amount)} is veel meer dan je ooit naar dit rekeningnummer betaalde (hoogste was "
+                      f"{nl.bedrag(top)})"
+                      + (f" en hoger dan {grens} ({nl.bedrag(flat)})." if amount > flat else ". Klopt dit bedrag?"))
     if not c.ok and c.severity == "block" and nopay:
         c = _soften(c, nopay)
     # a larger-than-usual invoice that says WHY, to the IBAN you already paid this supplier on (C3 only takes
@@ -1472,16 +1591,19 @@ def _repeat_request_check(message: dict, text: str, earlier_messages: list[dict]
             if not (refs & prefs):
                 continue  # different invoice numbers: a new invoice, not a repeat
             why = f"invoice {', '.join(sorted(refs & prefs))}"
+            why_nl = "Deze factuur werd"
         else:
             same_amount = amounts & {d for d, _, _ in find_amounts(ptext)}
             if not (ibans & pibans and same_amount):
                 continue
             why = f"{fmt_amount(max(same_amount))} to {', '.join(sorted(ibans & pibans))}"
+            why_nl = (f"Dezelfde betaling ({nl.bedrag(max(same_amount))} naar "
+                      f"{', '.join(sorted(ibans & pibans))}) werd")
         when = prev.get("date") or "?"
         subj = prev.get("subject") or ""
         return Check(rule, False, f"{why} already requested in the message of {when} ({subj})", "block",
-                     f"Dezelfde betaling ({why}) werd al gevraagd in het bericht van {when} (\"{subj}\"). "
-                     "Behandel die kaart; deze niet nog eens betalen.")
+                     f"{why_nl} al gevraagd in het bericht van {nl.datum(when)} (\"{subj}\"). "
+                     "Betaal één keer, via die kaart.")
     return Check(rule, True, "no earlier message asks for this payment", "block")
 
 
@@ -1553,7 +1675,7 @@ def _official_check(ib: str, names: list[str], sender: str, text: str) -> Check 
             p = ok_for[0]
             return Check(rule, True, f"{ib} is on the official list of {p.name} ({p.source}, checked {p.checked})",
                          "block", goed=f"{ib} staat op de officiële lijst van {p.name} ({p.ibans[ib]}; bron: "
-                                       f"{p.source}, gecontroleerd {p.checked}). Klopt ook het betalingskenmerk "
+                                       f"{p.source}, gecontroleerd op {nl.datum(p.checked)}). Klopt ook het betalingskenmerk "
                                        "met je brief of Mijn-omgeving?")
         p = claimed[0]
         sev = "block" if any(c.complete for c in claimed) else "warn"
@@ -1561,14 +1683,14 @@ def _official_check(ib: str, names: list[str], sender: str, text: str) -> Check 
         return Check(rule, False, f"message claims {names_}, but {ib or '(no IBAN)'} is not on its official list "
                                   f"({p.source}, checked {p.checked})", sev,
                      f"Dit bericht komt zogenaamd van {names_}, maar {ib or 'dit rekeningnummer'} staat niet op de "
-                     f"officiële lijst ({p.source}, gecontroleerd {p.checked}). Ook als je bank bij de IBAN-Naam-Check "
+                     f"officiële lijst ({p.source}, gecontroleerd op {nl.datum(p.checked)}). Ook als je bank bij de IBAN-Naam-Check "
                      f"'naam klopt' toont: die controleert alleen of de naam die jij intikt bij dit rekeningnummer "
                      f"hoort, niet of het rekeningnummer van {p.name} is. {p.what_to_do}")
     if hit:
         p, note = hit
         return Check(rule, True, f"{ib} is on the official list of {p.name} ({p.source}, checked {p.checked})",
                      "block", goed=f"{ib} is een officieel rekeningnummer van {p.name} ({note}; bron: {p.source}, "
-                                   f"gecontroleerd {p.checked}).")
+                                   f"gecontroleerd op {nl.datum(p.checked)}).")
     return None
 
 
@@ -1600,7 +1722,7 @@ def _pdf_checks(ib: str, amount: Decimal, mail_text: str, pdfs: list[dict], supp
         same = fmt_amount(amount) in totals
         out.append(Check("P4 PDF total matches the amount", same,
                          f"card {fmt_amount(amount)}, PDF total {', '.join(totals)}", "warn",
-                         f"Op de PDF-factuur staat totaal € {', '.join(totals)}, maar er wordt € {fmt_amount(amount)} "
+                         f"Op de PDF-factuur staat totaal {nl.bedragen(totals)}, maar er wordt {nl.bedrag(amount)} "
                          "gevraagd. Controleer welk bedrag klopt." if not same else ""))
     return out
 

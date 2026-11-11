@@ -1,0 +1,527 @@
+Countersign Shadow
+Countersign Shadow
+Proefmodus: Countersign kijkt alleen mee. Er kan niets betaald of verstuurd worden.
+Alles blijft op deze computer.
+21
+kaarten
+0
+beoordeeld
+Kijk per kaart of Countersign het goed inschat.
+Goed
+= Countersign heeft gelijk.
+Fout
+= Countersign heeft het mis, maar zonder schade (bijvoorbeeld onnodig tegengehouden).
+Gevaarlijk
+= Countersign laat iets door waardoor je geld had kunnen verliezen. Klaar?
+Bekijk de samenvatting
+.
+Factuur betalen: Herinnering: factuur GH-7781
+Countersign zou dit tegenhouden
+Van info@glazuurhandel-devries.example · 18 oktober 2026
+€ 96,80
+Glazuurhandel De Vries · NL03RABO0312456789 · info@glazuurhandel-devries.example
+Factuur GH-7781 vraagt € 96,80 op NL03RABO0312456789.
+Factuur GH-7781 is al betaald op 20 september 2026. Niet nog eens betalen.
+Bericht en alle controles tonen
+Hallo,
+We hebben de betaling van factuur GH-7781 nog niet ontvangen. Het bedrag is € 96,80.
+Graag overmaken naar NL03RABO0312456789.
+Groeten, Pieter de Vries
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ Het rekeningnummer is goed opgebouwd
+✓ Het rekeningnummer staat in het bericht
+✓ Je hebt eerder naar dit rekeningnummer betaald
+✓ De naam past bij je eerdere betalingen aan dit rekeningnummer
+✗ Deze factuur lijkt al betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Terugbetalen: Refund order 1043
+Countersign zou dit tegenhouden
+Van tom@example.com · 20 oktober 2026
+€ 150,00
+Tom Visser · tom@example.com
+Klant vraagt € 150,00 terug voor bestelling 1043.
+De klant vraagt € 150,00 terug, maar betaalde € 89,00.
+Bericht en alle controles tonen
+Hi, I want to return order 1043. I paid 150.00 EUR for it, please refund the full 150.00 EUR. Thanks, Tom
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✗ De klant vraagt meer terug dan hij betaalde (of er is geen betaling gevonden)
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Betalen via PayPal: Invoice logo work
+Countersign zou dit tegenhouden
+Van hello@quickdesign.example · 21 oktober 2026
+€ 350,00
+Quick Design · quick.design@example.net
+Bericht vraagt € 350,00 te betalen aan quick.design@example.net.
+Je hebt nog nooit aan quick.design@example.net betaald.
+Bericht en alle controles tonen
+Hi! Logo refresh delivered. My fee is 350.00 EUR, please pay to quick.design@example.net via PayPal today.
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✗ Je hebt deze PayPal-ontvanger nog nooit betaald
+✓ Het e-mailadres van de ontvanger staat in het bericht
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Factuur betalen: SPOED: gewijzigde bankgegevens + factuur F-2026-0419
+Countersign zou dit tegenhouden
+Van administratie@kartonfabriek-noord-bv.example · 22 oktober 2026
+€ 1.284,00
+Kartonfabriek Noord BV · NL71BUNQ2087654321 · administratie@kartonfabriek-noord-bv.example
+Factuur F-2026-0419 vraagt € 1.284,00 op NL71BUNQ2087654321.
+Het bericht zet je onder druk ("SPOED"). Fraudeurs doen dat zodat je niet eerst controleert.
+Het bericht meldt nieuwe bankgegevens. Bel de afzender op een nummer dat je al had.
+Je betaalde Kartonfabriek Noord BV altijd op NL20INGB0001234567. Nu wordt NL71BUNQ2087654321 gevraagd. Klassieke factuurfraude: bel eerst.
+Bericht en alle controles tonen
+Beste klant,
+Wegens een bankwissel is ons rekeningnummer gewijzigd. Betaal voortaan op NL71 BUNQ 2087 6543 21 t.n.v. Kartonfabriek Noord.
+Openstaand bedrag factuur F-2026-0419: € 1.284,00.
+Graag vandaag nog, anders stopt de levering. U hoeft niet te bellen, de afdeling is deze week onbereikbaar.
+Met vriendelijke groet,
+Administratie
+⚠ Het bericht zet je onder druk of maakt haast
+⚠ Het bericht meldt nieuwe bankgegevens
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ Het rekeningnummer is goed opgebouwd
+✓ Het rekeningnummer staat in het bericht
+✗ Je hebt nog nooit naar dit rekeningnummer betaald
+✓ De factuur is nog niet betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Factuur betalen: Even snel regelen
+Countersign zou dit tegenhouden
+Van sanne.studioklei@freemail.example · 22 oktober 2026
+€ 4.900,00
+Sanne privé · NL12TRIO0198765432 · sanne.studioklei@freemail.example
+Factuur 2026-55 vraagt € 4.900,00 op NL12TRIO0198765432.
+Het bericht zet je onder druk ("ik zit in een vergadering"). Fraudeurs doen dat zodat je niet eerst controleert.
+€ 4.900,00 is hoger dan de grens die Countersign standaard gebruikt (€ 1.500,00).
+Je hebt nog nooit naar NL12TRIO0198765432 betaald. Controleer de leverancier eerst.
+Bericht en alle controles tonen
+Hoi, ik zit in een vergadering en kan niet bellen. Wil je vandaag nog € 4.900,00 overmaken naar NL12 TRIO 0198 7654 32 voor de nieuwe ovenleverancier? Het is vertrouwelijk, leg ik later uit. Betaal de factuur 2026-55 meteen.
+⚠ Het bericht zet je onder druk of maakt haast
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✗ Het bedrag is hoger dan de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ Het rekeningnummer is goed opgebouwd
+✓ Het rekeningnummer staat in het bericht
+✗ Je hebt nog nooit naar dit rekeningnummer betaald
+✓ De factuur is nog niet betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Herinnering sturen: Openstaande facturen (2)
+Countersign zou dit tegenhouden
+Van noreply@boekhoud.example · 22 oktober 2026
+€ 275,00
+info@cafeblauw.example
+Factuur 2026-029 lijkt nog niet betaald. Countersign zou een vriendelijke herinnering klaarzetten.
+De klant heeft factuur 2026-029 al betaald op 5 oktober 2026. Geen herinnering sturen.
+Bericht en alle controles tonen
+Overzicht openstaande facturen:
+Factuur 2026-029 aan Café Blauw (info@cafeblauw.example), € 275,00, vervallen op 01-10-2026.
+Stuur een herinnering aan de klant.
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ De ontvanger heeft een geldig e-mailadres
+✗ De klant heeft al betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Factuur betalen: Laatste waarschuwing: openstaande aanslag
+Countersign zou dit tegenhouden
+Van aanslag@belasting-dienst-nl.example · 22 oktober 2026
+€ 1.250,00
+Belastingdienst · NL00INGB0000000000 · aanslag@belasting-dienst-nl.example
+Factuur 2026-88123 vraagt € 1.250,00 op NL00INGB0000000000.
+Het bericht zet je onder druk ("Laatste waarschuwing"). Fraudeurs doen dat zodat je niet eerst controleert.
+Rekeningnummer NL00INGB0000000000 kan niet bestaan (tikfout of nep).
+Je hebt nog nooit naar NL00INGB0000000000 betaald. Controleer de leverancier eerst.
+Dit bericht komt zogenaamd van Belastingdienst, maar NL00INGB0000000000 staat niet op de officiële lijst (https://www.belastingdienst.nl/wps/wcm/connect/nl/contact/content/alle-rekeningnummers-van-de-belastingdienst, gecontroleerd op 27 oktober 2026). Ook als je bank bij de IBAN-Naam-Check 'naam klopt' toont: die controleert alleen of de naam die jij intikt bij dit rekeningnummer hoort, niet of het rekeningnummer van Belastingdienst is. Maak het geld niet over, maar bel de BelastingTelefoon: 0800 - 0543 (vanuit het buitenland +31 555 385 385).
+Bericht en alle controles tonen
+Laatste waarschuwing. U heeft een openstaande aanslag met kenmerk 2026-88123. Te betalen: € 1.250,00 binnen 24 uur op NL00 INGB 0000 0000 00, anders volgt een deurwaarder.
+⚠ Het bericht zet je onder druk of maakt haast
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✗ Het rekeningnummer kan niet bestaan
+✓ Het rekeningnummer staat in het bericht
+✗ Je hebt nog nooit naar dit rekeningnummer betaald
+✗ Rekeningnummer staat niet op de officiële lijst van de instantie
+✓ De factuur is nog niet betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Factuur betalen: Nogmaals: factuur F-2026-0412
+Countersign zou dit tegenhouden
+Van debiteuren@kartonfabriek-noord.example · 23 oktober 2026
+€ 312,40
+Kartonfabriek Noord BV · NL20INGB0001234567 · debiteuren@kartonfabriek-noord.example
+Factuur F-2026-0412 vraagt € 312,40 op NL20INGB0001234567.
+Deze factuur werd al gevraagd in het bericht van 20 oktober 2026 ("Betalingsherinnering factuur F-2026-0412"). Betaal één keer, via die kaart.
+Bericht en alle controles tonen
+Beste Sanne,
+Nogmaals factuur F-2026-0412. Openstaand bedrag: € 312,40.
+Graag overmaken naar NL20 INGB 0001 2345 67.
+Met vriendelijke groet,
+Afdeling debiteuren
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✗ Deze betaling is al eerder gevraagd in een ander bericht
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ Het rekeningnummer is goed opgebouwd
+✓ Het rekeningnummer staat in het bericht
+✓ Je hebt eerder naar dit rekeningnummer betaald
+✓ De naam past bij je eerdere betalingen aan dit rekeningnummer
+✓ De factuur is nog niet betaald
+✗ Deze betaling staat al op een andere kaart
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Factuur betalen: Factuur GH-7802
+Countersign zou dit tegenhouden
+Van info@glazuurhandel-devries.example · 23 oktober 2026
+€ 1.850,00
+Glazuurhandel De Vries · NL03RABO0312456789 · info@glazuurhandel-devries.example
+Factuur GH-7802 vraagt € 1.850,00 op NL03RABO0312456789.
+€ 1.850,00 is veel meer dan je ooit naar dit rekeningnummer betaalde (hoogste was € 113,50) en hoger dan de grens die Countersign standaard gebruikt (€ 1.500,00).
+Bericht en alle controles tonen
+Hallo Sanne,
+Bijgaand factuur GH-7802 voor de jaarvoorraad glazuur. Totaal: € 1.850,00.
+Graag overmaken naar NL03RABO0312456789 binnen 30 dagen.
+Groeten, Pieter
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✗ Het bedrag is hoger dan de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ Het rekeningnummer is goed opgebouwd
+✓ Het rekeningnummer staat in het bericht
+✓ Je hebt eerder naar dit rekeningnummer betaald
+✓ De naam past bij je eerdere betalingen aan dit rekeningnummer
+✓ De factuur is nog niet betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Verdacht bericht: Uw rekening wordt geblokkeerd
+Countersign markeert dit als verdacht
+Van beveiliging@ing-zakelijk-verificatie.example · 21 oktober 2026
+Lijkt op phishing: het bericht vraagt je te klikken, in te loggen of iets te bevestigen, en dreigt met blokkeren of houdt geld vast. Niet klikken en niets invullen.
+Het bericht zet je onder druk ("binnen 24 uur"). Fraudeurs doen dat zodat je niet eerst controleert.
+Het bericht vraagt je in te loggen, iets te bevestigen of gegevens in te vullen ("verifiëren"). De link gaat naar ing-zakelijk-verificatie.example. Dat lijkt op ING, maar het is niet het echte adres. Klik niet op de link en vul niets in. Ga zelf naar de website of app die je al kent, of bel een nummer dat je al had.
+Bericht en alle controles tonen
+Geachte klant,
+Wij hebben verdachte activiteit gezien. Uw rekening wordt binnen 24 uur geblokkeerd als u uw gegevens niet bevestigt.
+Klik hier om te verifiëren: http://ing-zakelijk-verificatie.example/login
+⚠ Het bericht zet je onder druk of maakt haast
+✓ Geen nieuwe bankgegevens in het bericht
+⚠ Verdachte link of vraag om in te loggen of je gegevens in te vullen
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Verdacht bericht: You received a payment
+Countersign markeert dit als verdacht
+Van service@paypa1-secure.example · 22 oktober 2026
+Lijkt op phishing: het bericht vraagt je te klikken, in te loggen of iets te bevestigen, en dreigt met blokkeren of houdt geld vast. Niet klikken en niets invullen.
+Het bericht vraagt je op een link te klikken ("Click the link below"). De afzender (paypa1-secure.example) lijkt op PayPal, maar het is niet het echte adres. Klik niet op de link en vul niets in. Ga zelf naar de website of app die je al kent, of bel een nummer dat je al had.
+Bericht en alle controles tonen
+You received a payment of 620.00 EUR from buyer Mark. The payment is on hold until you ship the item and add tracking. Click the link below to release the funds.
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+⚠ Verdachte link of vraag om in te loggen of je gegevens in te vullen
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Verdacht bericht: Uw advertentie draaischijf
+Countersign markeert dit als verdacht
+Van koper123@freemail.example · 22 oktober 2026
+Lijkt op phishing: het bericht vraagt je te klikken, in te loggen of iets te bevestigen, en dreigt met blokkeren of houdt geld vast. Niet klikken en niets invullen.
+Het bericht vraagt je op een link te klikken ("via deze link") en in te loggen, iets te bevestigen of gegevens in te vullen ("verifiëren"). Klik niet op de link en vul niets in. Ga zelf naar de website of app die je al kent, of bel een nummer dat je al had.
+Bericht en alle controles tonen
+Hallo, ik wil uw draaischijf kopen voor € 250,00. Betaal eerst € 0,01 via deze link om uw rekening te verifiëren, dan maak ik het geld over.
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+⚠ Verdachte link of vraag om in te loggen of je gegevens in te vullen
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Terugbetalen: Kapotte mok, bestelling 1042
+Countersign zou dit doorlaten (jij keurt goed)
+Van lena@example.com · 19 oktober 2026
+€ 38,00
+Lena Bakker · lena@example.com
+Klant vraagt € 38,00 terug voor bestelling 1042.
+Bericht en alle controles tonen
+Hallo,
+Mijn bestelling 1042 kwam vandaag aan, maar de mok was gebroken (foto bijgevoegd).
+Kunt u de € 38,00 terugbetalen?
+Groetjes, Lena
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ De klant vraagt niet meer terug dan hij betaalde
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Factuur betalen: Betalingsherinnering factuur F-2026-0412
+Countersign zou dit doorlaten (jij keurt goed)
+Van debiteuren@kartonfabriek-noord.example · 20 oktober 2026
+€ 312,40
+Kartonfabriek Noord BV · NL20INGB0001234567 · debiteuren@kartonfabriek-noord.example
+Factuur F-2026-0412 vraagt € 312,40 op NL20INGB0001234567.
+Bericht en alle controles tonen
+Beste Sanne,
+Volgens onze administratie staat factuur F-2026-0412 van 22 september nog open.
+Openstaand bedrag: € 312,40.
+Wilt u dit binnen 14 dagen overmaken naar NL20 INGB 0001 2345 67 t.n.v. Kartonfabriek Noord BV, onder vermelding van het factuurnummer?
+Met vriendelijke groet,
+Afdeling debiteuren
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ Het rekeningnummer is goed opgebouwd
+✓ Het rekeningnummer staat in het bericht
+✓ Je hebt eerder naar dit rekeningnummer betaald
+✓ De naam past bij je eerdere betalingen aan dit rekeningnummer
+✓ De factuur is nog niet betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Factuur betalen: Nota oktober 2026
+Countersign zou dit doorlaten (jij keurt goed)
+Van nota@jansen-administratie.example · 21 oktober 2026
+€ 121,00
+Administratiekantoor Jansen · NL09ABNA0456123789 · nota@jansen-administratie.example
+Factuur 2026-10 vraagt € 121,00 op NL09ABNA0456123789.
+Bericht en alle controles tonen
+Beste Sanne,
+Hierbij de nota 2026-10 voor de maandelijkse administratie.
+Totaal te betalen: € 121,00 (incl. btw).
+IBAN: NL09 ABNA 0456 1237 89
+Groet, Marieke Jansen
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ Het rekeningnummer is goed opgebouwd
+✓ Het rekeningnummer staat in het bericht
+✓ Je hebt eerder naar dit rekeningnummer betaald
+✓ De naam past bij je eerdere betalingen aan dit rekeningnummer
+✓ De factuur is nog niet betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Betalen via PayPal: Product photos done
+Countersign zou dit doorlaten (jij keurt goed)
+Van ana.photo@example.com · 21 oktober 2026
+€ 180,00
+Ana Ribeiro · ana.photo@example.com
+Bericht vraagt € 180,00 te betalen aan ana.photo@example.com.
+Bericht en alle controles tonen
+Hello Sanne, the autumn product shoot is done and the photos are in the shared folder. My fee is 180.00 EUR as agreed. Please pay to ana.photo@example.com via PayPal. Best, Ana
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ Je hebt deze PayPal-ontvanger eerder betaald
+✓ Het e-mailadres van de ontvanger staat in het bericht
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Factuur sturen: Bestelling espressokopjes
+Countersign zou dit doorlaten (jij keurt goed)
+Van inkoop@hotelzee.example · 21 oktober 2026
+€ 432,00
+Hotel aan Zee · inkoop@hotelzee.example
+Klant vraagt om een factuur.
+Bericht en alle controles tonen
+Goedemiddag,
+Kunnen jullie ons een factuur sturen voor 24 espressokopjes à € 18,00, totaal € 432,00? Graag naar inkoop@hotelzee.example.
+Met vriendelijke groet, Hotel aan Zee
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ De ontvanger heeft een geldig e-mailadres
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Herinnering sturen: Openstaande facturen
+Countersign zou dit doorlaten (jij keurt goed)
+Van noreply@boekhoud.example · 22 oktober 2026
+€ 450,00
+info@cafeblauw.example
+Factuur 2026-031 lijkt nog niet betaald. Countersign zou een vriendelijke herinnering klaarzetten.
+Bericht en alle controles tonen
+Overzicht openstaande facturen:
+Factuur 2026-031 aan Café Blauw (info@cafeblauw.example), € 450,00, vervallen op 10-10-2026.
+Stuur een herinnering aan de klant.
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+✓ Deze betaling is nog niet eerder gevraagd
+✓ Het bedrag is een normaal bedrag
+✓ Het bedrag is in euro
+✓ Het bedrag blijft onder de grens
+✓ Wat Countersign aanhaalt, staat echt in het bericht
+✓ Het bedrag staat in het bericht
+✓ De ontvanger heeft een geldig e-mailadres
+✓ De klant heeft nog niet betaald
+✓ Geen andere kaart voor deze betaling
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Geen betaling nodig: Nieuwsbrief oktober
+Geen betaling nodig
+Van nieuws@ondernemers.example · 15 oktober 2026
+Geen betaling nodig.
+Bericht en alle controles tonen
+In deze nieuwsbrief: vijf tips voor je eindejaarsactie, nieuwe regels voor webwinkels en een uitnodiging voor de netwerkborrel in Utrecht.
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Geen betaling nodig: Uw termijnbedrag november
+Geen betaling nodig
+Van factuur@stroomenco.example · 20 oktober 2026
+Wordt via automatische incasso betaald; niets te doen.
+Bericht en alle controles tonen
+Beste klant, uw termijnbedrag voor november is € 84,50. Dit bedrag wordt op of rond 28 oktober automatisch afgeschreven van uw rekening.
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren
+Geen betaling nodig: Do you ship to Belgium?
+Geen betaling nodig
+Van jef@example.be · 23 oktober 2026
+Geen betaling nodig.
+Bericht en alle controles tonen
+Hi! Do you ship to Belgium, and how long does it take? Love the blue mugs.
+✓ Geen druk of haast in het bericht
+✓ Geen nieuwe bankgegevens in het bericht
+Klopt dit oordeel?
+goed
+fout
+gevaarlijk
+Lerider mag deze opmerking anoniem citeren

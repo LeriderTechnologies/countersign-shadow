@@ -13,16 +13,16 @@ from .checks import Policy, evaluate, own_account_draft, verdict
 from .store import Workspace
 
 VERDICT_NL = {
-    "ok": "Countersign zou dit voorleggen ter goedkeuring",
-    "warn": "Countersign zou dit voorleggen, met een waarschuwing",
+    "ok": "Countersign zou dit doorlaten (jij keurt goed)",
+    "warn": "Countersign zou dit doorlaten, met een waarschuwing",
     "blocked": "Countersign zou dit tegenhouden",
     "flagged": "Countersign markeert dit als verdacht",
-    "none": "Geen geldactie nodig",
+    "none": "Geen betaling nodig",
 }
 ACTION_NL = {
-    "pay_invoice": "Factuur betalen", "refund": "Terugbetalen", "payout": "Uitbetalen (PayPal)",
+    "pay_invoice": "Factuur betalen", "refund": "Terugbetalen", "payout": "Betalen via PayPal",
     "send_invoice": "Factuur sturen", "send_reminder": "Herinnering sturen",
-    "flag_suspicious": "Verdacht bericht", "no_action": "Geen actie",
+    "flag_suspicious": "Verdacht bericht", "no_action": "Geen betaling nodig",
 }
 
 

@@ -12,6 +12,7 @@ import secrets
 from collections import Counter
 from datetime import datetime, timezone
 
+from . import nl
 from .store import Workspace
 
 MARKS = ("right", "wrong", "dangerous")
@@ -85,28 +86,31 @@ def summary(ws: Workspace) -> dict:
 
 
 def summary_markdown(s: dict) -> str:
-    def table(d: dict) -> str:
+    def table(d: dict, label=lambda k: k) -> str:
         rows = ["| | goed | fout | gevaarlijk |", "|---|---|---|---|"]
-        for k, v in d.items():
-            rows.append(f"| {k} | {v.get('right', 0)} | {v.get('wrong', 0)} | {v.get('dangerous', 0)} |")
+        for k, v in d.items():  # Dutch row names; samenvatting.json keeps the internal codes
+            rows.append(f"| {label(k)} | {v.get('right', 0)} | {v.get('wrong', 0)} | {v.get('dangerous', 0)} |")
         return "\n".join(rows)
 
     m = s["marks"]
     lines = [
-        f"# Countersign Shadow: samenvatting pilot {s['pilot']} ({s['generated']})", "",
-        "Lees dit hele bestand voordat je het deelt. Het bevat alleen tellingen en de opmerkingen die je zelf",
-        "hebt aangevinkt als 'mag geciteerd worden' (e-mailadressen, IBANs, bedragen en nummers zijn weggehaald).",
-        "Geen berichten, namen of bedragen. / Read this whole file before sharing it. Counts and opted-in",
-        "comments only.", "",
+        f"# Countersign Shadow: samenvatting van je proef ({nl.datum(s['generated'])})", "",
+        f"Proefnummer: {s['pilot']}", "",
+        "Lees dit voordat je het deelt. Het bevat alleen tellingen en de opmerkingen waarvan je hebt aangevinkt",
+        "dat Lerider ze anoniem mag citeren. E-mailadressen, rekeningnummers, bedragen en lange nummers zijn eruit",
+        "gehaald. Wil je het delen? Klik op 'Bewaar als bestand om te delen' en mail het bestand samenvatting.md uit",
+        "de map deel-mij naar hello@lerider.com.", "",
         f"- Berichten ingelezen: {s['messages_imported']} · transacties: {s['transactions_imported']}",
         f"- Kaarten gemaakt: {s['cards_drafted']} · beoordeeld: {s['cards_reviewed']}",
         f"- Goed: {m.get('right', 0)} · Fout: {m.get('wrong', 0)} · Gevaarlijk: {m.get('dangerous', 0)}",
         f"- Risico terecht tegengehouden: {s['safety']['risky_cards_correctly_stopped']} · "
         f"gevaarlijk maar niet tegengehouden: {s['safety']['dangerous_cards_not_stopped']} · "
         f"onnodig tegengehouden: {s['safety']['cards_stopped_without_need']}", "",
-        "## Per oordeel van Countersign", "", table(s["by_verdict"]), "",
-        "## Per soort actie", "", table(s["by_action"]), "",
-        "## Per planner", "", table(s["by_planner"]), "", "## Citaten (met toestemming)", "",
+        "## Per oordeel van Countersign", "", table(s["by_verdict"], lambda k: nl.VERDICT_KORT.get(k, k)), "",
+        "## Per soort actie", "", table(s["by_action"], lambda k: nl.ACTION_KORT.get(k, k)), "",
     ]
-    lines += [f'- ({MARK_NL[q["mark"]]}, {q["action"]}) "{q["quote"]}"' for q in s["quotes"]] or ["- (geen)"]
+    if len(s["by_planner"]) > 1:  # one method (the usual offline rules) needs no table of its own
+        lines += ["## Per beoordelingsmethode", "", table(s["by_planner"], nl.planner), ""]
+    lines += ["## Citaten (met toestemming)", ""]
+    lines += [f'- ({MARK_NL[q["mark"]]}, {nl.ACTION_KORT.get(q["action"], q["action"])}) "{q["quote"]}"' for q in s["quotes"]] or ["- (geen)"]
     return "\n".join(lines) + "\n"
